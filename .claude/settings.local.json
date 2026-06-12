@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "WebSearch",
-      "WebFetch(domain:pngimg.com)",
-      "PowerShell(Copy-Item *)"
-    ]
-  }
-}
