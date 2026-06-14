@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer'
+import { Resend } from 'resend'
 
 const BRAND = 'The Meriden Collection'
 const CONTACT_EMAIL = 'stay@themeridencollection.com'
@@ -53,39 +53,19 @@ export interface MailOptions {
 }
 
 export async function sendMail({ to, subject, html, replyTo }: MailOptions) {
-  const user = process.env.GMAIL_USER
-  const pass = process.env.GMAIL_APP_PASSWORD
-  if (!user || !pass) { console.warn('Email not configured — skipping'); return }
+  const apiKey = process.env.RESEND_API_KEY
+  if (!apiKey) { console.warn('RESEND_API_KEY not set — skipping'); return }
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: { user, pass },
-    connectionTimeout: 10000,
-    socketTimeout: 10000,
-    tls: {
-      rejectUnauthorized: true,
-    },
-    // Force IPv4 only at the socket level using synchronous DNS resolution
-    lookup: (hostname, options, callback) => {
-      const dns = require('dns')
-      try {
-        const addresses = dns.resolve4Sync(hostname)
-        callback(null, addresses[0], 4)
-      } catch (err) {
-        callback(err)
-      }
-    },
-  })
-
-  await transporter.sendMail({
-    from: `"${BRAND}" <${user}>`,
+  const resend = new Resend(apiKey)
+  const { error } = await resend.emails.send({
+    from: `${BRAND} <stay@themeridencollection.com>`,
     to,
     subject,
     html: BASE_HTML(html),
     ...(replyTo ? { replyTo } : {}),
   })
+
+  if (error) throw new Error(error.message)
 }
 
 function row(label: string, value: string, shaded = false) {
