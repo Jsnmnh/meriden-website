@@ -19,7 +19,9 @@ router.post('/', async (req: Request, res: Response) => {
 
   const notificationEmail = process.env.NOTIFICATION_EMAIL || process.env.GMAIL_USER || ''
 
-  const [notifyResult, autoReplyResult] = await Promise.allSettled([
+  res.json({ ok: true })
+
+  Promise.allSettled([
     sendMail({
       to: notificationEmail,
       subject: `Contact Form — ${data.name}${data.subject ? ` · ${data.subject}` : ''}`,
@@ -35,12 +37,10 @@ router.post('/', async (req: Request, res: Response) => {
       html: contactAutoReplyHtml(data.name),
       replyTo: notificationEmail,
     }),
-  ])
-
-  if (notifyResult.status === 'rejected') console.error('Contact notify error:', notifyResult.reason)
-  if (autoReplyResult.status === 'rejected') console.error('Contact auto-reply error:', autoReplyResult.reason)
-
-  res.json({ ok: true })
+  ]).then(([notifyResult, autoReplyResult]) => {
+    if (notifyResult.status === 'rejected') console.error('Notify email error:', notifyResult.reason)
+    if (autoReplyResult.status === 'rejected') console.error('Auto-reply error:', autoReplyResult.reason)
+  })
 })
 
 export default router

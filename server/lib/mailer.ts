@@ -60,6 +60,12 @@ export async function sendMail({ to, subject, html, replyTo }: MailOptions) {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: { user, pass },
+    connectionTimeout: 10000,
+    socketTimeout: 10000,
+    tls: {
+      rejectUnauthorized: true,
+      family: 4,
+    },
   })
 
   await transporter.sendMail({
