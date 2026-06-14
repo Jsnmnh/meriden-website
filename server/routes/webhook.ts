@@ -32,6 +32,9 @@ router.post('/', async (req: Request, res: Response) => {
     return
   }
 
+  // Respond immediately so Stripe doesn't time out waiting for email sends
+  res.json({ received: true })
+
   switch (event.type) {
     case 'checkout.session.completed': {
       const session = event.data.object as Stripe.Checkout.Session
@@ -45,21 +48,22 @@ router.post('/', async (req: Request, res: Response) => {
       })
 
       const reservationRef = session.id.slice(-8).toUpperCase()
-      const guestEmail = meta.guestEmail || session.customer_email || ''
+      const guestEmail = meta.guestEmail || session.customer_email || (session as any).customer_details?.email || ''
+      const guestName = meta.guestName || (session as any).customer_details?.name || 'Guest'
       const notificationEmail = process.env.NOTIFICATION_EMAIL || process.env.GMAIL_USER || ''
       const totalAud = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00'
-      const checkIn = formatDate(meta.checkIn ?? '')
-      const checkOut = formatDate(meta.checkOut ?? '')
+      const checkIn = meta.checkIn ? formatDate(meta.checkIn) : '—'
+      const checkOut = meta.checkOut ? formatDate(meta.checkOut) : '—'
 
       console.log('Sending emails — guestEmail:', guestEmail || '(none)', '| notificationEmail:', notificationEmail || '(none)')
 
-      const results = await Promise.allSettled([
+      Promise.allSettled([
         guestEmail
           ? sendMail({
               to: guestEmail,
               subject: `Booking Confirmed — ${meta.listingName ?? 'The Meriden Collection'}`,
               html: bookingConfirmationHtml({
-                guestName: meta.guestName ?? 'Guest',
+                guestName,
                 listingName: meta.listingName ?? 'The Meriden Collection',
                 reservationRef,
                 checkIn,
@@ -72,9 +76,9 @@ router.post('/', async (req: Request, res: Response) => {
         notificationEmail
           ? sendMail({
               to: notificationEmail,
-              subject: `New Booking — ${meta.guestName ?? 'Guest'} · ${meta.checkIn}`,
+              subject: `New Booking — ${guestName} · ${meta.checkIn ?? reservationRef}`,
               html: bookingOwnerNotificationHtml({
-                guestName: meta.guestName ?? 'Unknown',
+                guestName,
                 guestEmail,
                 guestPhone: meta.guestPhone ?? '—',
                 listingName: meta.listingName ?? 'Unknown listing',
@@ -88,11 +92,11 @@ router.post('/', async (req: Request, res: Response) => {
               }),
             })
           : Promise.resolve(),
-      ])
-
-      results.forEach((r, i) => {
-        if (r.status === 'rejected') console.error(`Booking email ${i} failed:`, r.reason)
-        else console.log(`Booking email ${i} sent OK`)
+      ]).then(results => {
+        results.forEach((r, i) => {
+          if (r.status === 'rejected') console.error(`Booking email ${i} failed:`, r.reason)
+          else console.log(`Booking email ${i} sent OK`)
+        })
       })
 
       // TODO: create Hostaway reservation
@@ -156,8 +160,6 @@ router.post('/', async (req: Request, res: Response) => {
     default:
       break
   }
-
-  res.json({ received: true })
 })
 
 export default router
