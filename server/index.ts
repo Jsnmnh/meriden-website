@@ -1,5 +1,8 @@
 import 'dotenv/config'
+import dns from 'dns'
 import express from 'express'
+
+dns.setDefaultResultOrder('ipv4first')
 import cors from 'cors'
 import path from 'path'
 import { fileURLToPath } from 'url'
