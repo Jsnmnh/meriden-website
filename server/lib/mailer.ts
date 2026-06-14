@@ -58,9 +58,7 @@ export async function sendMail({ to, subject, html, replyTo }: MailOptions) {
   if (!user || !pass) { console.warn('Email not configured — skipping'); return }
 
   const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+    service: 'gmail',
     auth: { user, pass },
   })
 
