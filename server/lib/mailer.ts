@@ -59,9 +59,8 @@ export async function sendMail({ to, subject, html, replyTo }: MailOptions) {
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    family: 4,
+    port: 587,
+    secure: false,
     auth: { user, pass },
   })
 
