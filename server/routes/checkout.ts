@@ -84,6 +84,8 @@ router.post('/', async (req: Request, res: Response) => {
         guests: String(guests),
         nights: String(nights),
         guestName,
+        guestFirstName: guestFirstName ?? '',
+        guestLastName: guestLastName ?? '',
         guestEmail: guestEmail ?? '',
         guestPhone: guestPhone ?? '',
         specialRequests: specialRequests ?? '',

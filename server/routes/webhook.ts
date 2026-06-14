@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express'
 import Stripe from 'stripe'
 import { sendMail, bookingConfirmationHtml, bookingOwnerNotificationHtml, refundConfirmationHtml, refundNotificationHtml, paymentFailedNotificationHtml } from '../lib/mailer.js'
+import { createReservation } from '../lib/hostaway.js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-05-28.basil' })
 
@@ -47,13 +48,36 @@ router.post('/', async (req: Request, res: Response) => {
         ...meta,
       })
 
-      const reservationRef = session.id.slice(-8).toUpperCase()
       const guestEmail = meta.guestEmail || session.customer_email || (session as any).customer_details?.email || ''
       const guestName = meta.guestName || (session as any).customer_details?.name || 'Guest'
       const notificationEmail = process.env.NOTIFICATION_EMAIL || process.env.GMAIL_USER || ''
       const totalAud = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00'
       const checkIn = meta.checkIn ? formatDate(meta.checkIn) : '—'
       const checkOut = meta.checkOut ? formatDate(meta.checkOut) : '—'
+
+      // Create Hostaway reservation and use its ID — fall back to Stripe session ref if it fails
+      let reservationRef = session.id.slice(-8).toUpperCase()
+      if (meta.listingId && meta.checkIn && meta.checkOut) {
+        try {
+          const nameParts = guestName.split(' ')
+          const reservation = await createReservation({
+            listingId: Number(meta.listingId),
+            checkIn: meta.checkIn,
+            checkOut: meta.checkOut,
+            guests: Number(meta.guests) || 1,
+            guestFirstName: meta.guestFirstName || nameParts[0] || 'Guest',
+            guestLastName: meta.guestLastName || nameParts.slice(1).join(' ') || '-',
+            guestEmail,
+            guestPhone: meta.guestPhone || '',
+            totalPrice: session.amount_total ? session.amount_total / 100 : 0,
+            specialRequests: meta.specialRequests || '',
+          })
+          reservationRef = String(reservation.id)
+          console.log('Hostaway reservation created:', reservation.id)
+        } catch (err) {
+          console.error('Hostaway reservation creation failed — using Stripe ref:', err)
+        }
+      }
 
       console.log('Sending emails — guestEmail:', guestEmail || '(none)', '| notificationEmail:', notificationEmail || '(none)')
 
@@ -99,7 +123,6 @@ router.post('/', async (req: Request, res: Response) => {
         })
       })
 
-      // TODO: create Hostaway reservation
       break
     }
     case 'checkout.session.expired': {
