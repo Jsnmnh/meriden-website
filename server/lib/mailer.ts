@@ -58,13 +58,24 @@ export async function sendMail({ to, subject, html, replyTo }: MailOptions) {
   if (!user || !pass) { console.warn('Email not configured — skipping'); return }
 
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: { user, pass },
     connectionTimeout: 10000,
     socketTimeout: 10000,
     tls: {
       rejectUnauthorized: true,
-      family: 4,  // Force IPv4 only
+    },
+    // Force IPv4 only at the socket level
+    lookup: async (hostname, options, callback) => {
+      const dns = require('dns').promises
+      try {
+        const addresses = await dns.resolve4(hostname)
+        callback(null, addresses[0], 4)
+      } catch (err) {
+        callback(err)
+      }
     },
   })
 
