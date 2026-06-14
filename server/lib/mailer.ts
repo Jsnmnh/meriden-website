@@ -67,11 +67,11 @@ export async function sendMail({ to, subject, html, replyTo }: MailOptions) {
     tls: {
       rejectUnauthorized: true,
     },
-    // Force IPv4 only at the socket level
-    lookup: async (hostname, options, callback) => {
-      const dns = require('dns').promises
+    // Force IPv4 only at the socket level using synchronous DNS resolution
+    lookup: (hostname, options, callback) => {
+      const dns = require('dns')
       try {
-        const addresses = await dns.resolve4(hostname)
+        const addresses = dns.resolve4Sync(hostname)
         callback(null, addresses[0], 4)
       } catch (err) {
         callback(err)
