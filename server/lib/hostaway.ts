@@ -49,6 +49,14 @@ export async function getListing(id: number) {
   return request<unknown>(`/listings/${id}`)
 }
 
+export async function getListingImages(id: number) {
+  return request<unknown[]>(`/listings/${id}/listingImages`)
+}
+
+export async function getReviews(listingId: number) {
+  return request<unknown[]>(`/reviews?listingId=${listingId}&limit=500&sortOrder=submittedAt%20desc`)
+}
+
 export async function getCalendar(id: number, startDate: string, endDate: string) {
   return request<unknown[]>(`/listings/${id}/calendar?startDate=${startDate}&endDate=${endDate}`)
 }

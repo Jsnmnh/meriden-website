@@ -11,6 +11,7 @@ interface CheckoutBody {
   guests: number
   nights: number
   pricePerNight: number
+  totalNightlyCost?: number
   cleaningFee: number
   gst: number
   guestFirstName: string
@@ -26,9 +27,10 @@ router.post('/', async (req: Request, res: Response) => {
   const body = req.body as CheckoutBody
   const {
     listingId, listingName, checkIn, checkOut, guests, nights,
-    pricePerNight, cleaningFee, gst,
+    pricePerNight, totalNightlyCost, cleaningFee, gst,
     guestFirstName, guestLastName, guestEmail, guestPhone, specialRequests,
   } = body
+  const accommodationAmount = totalNightlyCost ?? nights * pricePerNight
 
   if (!listingId || !checkIn || !checkOut || !nights || nights < 1) {
     return res.status(400).json({ error: 'Missing required booking fields' })
@@ -47,7 +49,7 @@ router.post('/', async (req: Request, res: Response) => {
         {
           price_data: {
             currency: 'aud',
-            unit_amount: Math.round(nights * pricePerNight * 100),
+            unit_amount: Math.round(accommodationAmount * 100),
             product_data: {
               name: `${listingName ?? 'The Meriden Collection'} — ${nights} night${nights !== 1 ? 's' : ''}`,
               description: `${checkIn} to ${checkOut} · ${guests} guest${guests !== 1 ? 's' : ''}`,
@@ -76,11 +78,13 @@ router.post('/', async (req: Request, res: Response) => {
       cancel_url: `${origin}/?booking=cancelled`,
       metadata: {
         listingId: String(listingId),
+        listingName: listingName ?? 'The Meriden Collection',
         checkIn,
         checkOut,
         guests: String(guests),
         nights: String(nights),
         guestName,
+        guestEmail: guestEmail ?? '',
         guestPhone: guestPhone ?? '',
         specialRequests: specialRequests ?? '',
       },
