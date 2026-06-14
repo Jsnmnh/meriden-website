@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer'
-import { promises as dns } from 'dns'
 
 const BRAND = 'The Meriden Collection'
 const CONTACT_EMAIL = 'stay@themeridencollection.com'
@@ -58,17 +57,14 @@ export async function sendMail({ to, subject, html, replyTo }: MailOptions) {
   const pass = process.env.GMAIL_APP_PASSWORD
   if (!user || !pass) { console.warn('Email not configured — skipping'); return }
 
-  const [smtpIp] = await dns.resolve4('smtp.gmail.com')
   const transporter = nodemailer.createTransport({
-    host: smtpIp,
-    port: 465,
-    secure: true,
+    service: 'gmail',
     auth: { user, pass },
     connectionTimeout: 10000,
     socketTimeout: 10000,
     tls: {
-      servername: 'smtp.gmail.com',
       rejectUnauthorized: true,
+      family: 4,  // Force IPv4 only
     },
   })
 
