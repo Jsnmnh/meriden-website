@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 115 40" fill="none">
+  <!-- House icon -->
+  <path d="M6 22 L6 34 L16 34 L16 26 L20 26 L20 34 L30 34 L30 22" stroke="#1A3C5E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <path d="M2 24 L18 10 L34 24" stroke="#1A3C5E" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="18" cy="10" r="2" fill="#1A3C5E"/>
+  <text x="40" y="29" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" fill="#1A3C5E" letter-spacing="-0.2">stayz</text>
+</svg>
