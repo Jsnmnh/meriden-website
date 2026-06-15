@@ -42,7 +42,7 @@ const GALLERY_PHOTOS = [
 const CHAR_INTERVAL = 55
 const TYPE_START = 600
 
-type Page = 'home' | 'list' | 'book' | 'contact' | 'listing' | 'privacy' | 'terms' | 'about'
+type Page = 'home' | 'services' | 'list' | 'book' | 'contact' | 'listing' | 'privacy' | 'terms' | 'about'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function smoothstep(t: number) { return t * t * (3 - 2 * t) }
@@ -477,32 +477,20 @@ function AboutPage({ onNavigate }: { onNavigate: (p: Page) => void }) {
         </div>
       </section>
 
-      {/* What we do */}
-      <section style={{ padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'clamp(48px, 8vw, 100px)', alignItems: 'start' }}>
-          <ScrollReveal>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888', marginBottom: '20px' }}>Our Approach</p>
-            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(24px, 3vw, 42px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '28px' }}>
-              Selective by design.<br />Focused on results.
-            </h2>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(14px, 1.2vw, 16px)', color: '#555', lineHeight: 1.85, marginBottom: '20px' }}>
-              We are not a mass-market property management platform. We deliberately limit how many properties we take on, because quality of management — not quantity of listings — is what drives results for our owners.
-            </p>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(14px, 1.2vw, 16px)', color: '#555', lineHeight: 1.85 }}>
-              Every property in our portfolio receives the same level of attention: professional photography, precision pricing, rigorous guest screening, and on-ground Sydney support available around the clock.
-            </p>
-          </ScrollReveal>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Values */}
+      <section style={{ background: '#F7F4EF', padding: 'clamp(64px, 8vw, 100px) clamp(24px, 4vw, 64px)', borderTop: '1px solid #E8E2D9' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '48px' }}>
             {[
-              { n: '01', title: 'Precision Pricing', body: 'Our dynamic pricing model analyses live market data, local events, and seasonal demand daily — not weekly — to ensure your property is always priced to maximise occupancy without leaving money on the table.' },
-              { n: '02', title: 'Guest Excellence', body: 'We screen every guest, manage every communication, and resolve every issue — so you never have to. Our average guest review score across the portfolio sits above 4.8.' },
-              { n: '03', title: 'Owner Transparency', body: 'You receive a clear monthly statement, direct payouts, and full access to your calendar. No surprises, no chasing, no ambiguity about what your property earned and why.' },
-            ].map((item, i) => (
-              <ScrollReveal key={item.n} delay={i * 80}>
-                <div style={{ padding: '28px 32px', border: '1px solid #E8E2D9', borderRadius: '16px', background: '#FAFAF8' }}>
-                  <p style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: '28px', color: '#E4D9BE', marginBottom: '10px', letterSpacing: '-0.02em' }}>{item.n}</p>
-                  <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 600, fontSize: 'clamp(14px, 1.2vw, 17px)', color: '#000', marginBottom: '10px' }}>{item.title}</h3>
-                  <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', color: '#666', lineHeight: 1.8 }}>{item.body}</p>
+              { value: '4.8★', label: 'Average guest rating across our portfolio' },
+              { value: '50%+', label: 'Average income uplift vs long-term lease' },
+              { value: '<7 days', label: 'From signed agreement to first live booking' },
+              { value: '24/7', label: 'Guest support and on-ground Sydney team' },
+            ].map((s, i) => (
+              <ScrollReveal key={s.label} delay={i * 80}>
+                <div>
+                  <p style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 48px)', color: '#2A2927', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '12px' }}>{s.value}</p>
+                  <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', color: '#777', lineHeight: 1.7 }}>{s.label}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -510,7 +498,8 @@ function AboutPage({ onNavigate }: { onNavigate: (p: Page) => void }) {
         </div>
       </section>
 
-      {/* Values */}
+      {/* What we do */}
+
       <section style={{ background: '#2A2927', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <ScrollReveal>
@@ -538,19 +527,31 @@ function AboutPage({ onNavigate }: { onNavigate: (p: Page) => void }) {
       </section>
 
       {/* Stats */}
-      <section style={{ background: '#F7F4EF', padding: 'clamp(64px, 8vw, 100px) clamp(24px, 4vw, 64px)', borderTop: '1px solid #E8E2D9' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '48px' }}>
+      <section style={{ padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'clamp(48px, 8vw, 100px)', alignItems: 'start' }}>
+          <ScrollReveal>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888', marginBottom: '20px' }}>Our Approach</p>
+            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(24px, 3vw, 42px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '28px' }}>
+              Selective by design.<br />Focused on results.
+            </h2>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(14px, 1.2vw, 16px)', color: '#555', lineHeight: 1.85, marginBottom: '20px' }}>
+              We are not a mass-market property management platform. We deliberately limit how many properties we take on, because quality of management — not quantity of listings — is what drives results for our owners.
+            </p>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(14px, 1.2vw, 16px)', color: '#555', lineHeight: 1.85 }}>
+              Every property in our portfolio receives the same level of attention: professional photography, precision pricing, rigorous guest screening, and on-ground Sydney support available around the clock.
+            </p>
+          </ScrollReveal>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
             {[
-              { value: '4.8★', label: 'Average guest rating across our portfolio' },
-              { value: '50%+', label: 'Average income uplift vs long-term lease' },
-              { value: '<7 days', label: 'From signed agreement to first live booking' },
-              { value: '24/7', label: 'Guest support and on-ground Sydney team' },
-            ].map((s, i) => (
-              <ScrollReveal key={s.label} delay={i * 80}>
-                <div>
-                  <p style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 48px)', color: '#2A2927', letterSpacing: '-0.02em', lineHeight: 1, marginBottom: '12px' }}>{s.value}</p>
-                  <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', color: '#777', lineHeight: 1.7 }}>{s.label}</p>
+              { n: '01', title: 'Precision Pricing', body: 'Our dynamic pricing model analyses live market data, local events, and seasonal demand daily — not weekly — to ensure your property is always priced to maximise occupancy without leaving money on the table.' },
+              { n: '02', title: 'Guest Excellence', body: 'We screen every guest, manage every communication, and resolve every issue — so you never have to. Our average guest review score across the portfolio sits above 4.8.' },
+              { n: '03', title: 'Owner Transparency', body: 'You receive a clear monthly statement, direct payouts, and full access to your calendar. No surprises, no chasing, no ambiguity about what your property earned and why.' },
+            ].map((item, i) => (
+              <ScrollReveal key={item.n} delay={i * 80}>
+                <div style={{ padding: '28px 32px', border: '1px solid #E8E2D9', borderRadius: '16px', background: '#FAFAF8' }}>
+                  <p style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: '28px', color: '#E4D9BE', marginBottom: '10px', letterSpacing: '-0.02em' }}>{item.n}</p>
+                  <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 600, fontSize: 'clamp(14px, 1.2vw, 17px)', color: '#000', marginBottom: '10px' }}>{item.title}</h3>
+                  <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', color: '#666', lineHeight: 1.8 }}>{item.body}</p>
                 </div>
               </ScrollReveal>
             ))}
@@ -611,7 +612,8 @@ function Footer({ onNavigate }: { onNavigate: (p: Page) => void }) {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '24px' }}>
             <div style={{ display: 'flex', gap: 'clamp(24px, 4vw, 60px)', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
               {([
-                { label: 'Services', page: 'home' as Page },
+                { label: 'Home', page: 'home' as Page },
+                { label: 'Services', page: 'services' as Page },
                 { label: 'About', page: 'about' as Page },
                 { label: 'Partner with Us', page: 'list' as Page },
                 { label: 'Book a Stay', page: 'book' as Page },
@@ -1438,15 +1440,336 @@ function FaqItem({ q, a, open, onToggle }: { q: string; a: string; open: boolean
   )
 }
 
-// ─── Home Page ────────────────────────────────────────────────────────────────
-function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
-  usePageMeta('The Meriden Collection | Premium STR Management in Sydney', 'Sydney\'s premium short-term rental management company. Earn up to 50% more than long-term leasing — fully managed, hassle-free.')
+// ─── Services Page ────────────────────────────────────────────────────────────
+function ServicesPage({ onNavigate }: { onNavigate: (p: Page) => void }) {
+  usePageMeta('Services | The Meriden Collection', 'Premium short-term rental management packages for Sydney property owners. Earn up to 50% more than long-term leasing.')
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null)
-  const [heroMouse, setHeroMouse] = useState({ x: 0, y: 0 })
   const ctaSectionRef = useRef<HTMLElement>(null)
   const ctaTarget = useRef({ x: 0, y: 0 })
   const ctaCurr = useRef({ x: 0, y: 0 })
   const [ctaXy, setCtaXy] = useState({ x: 0, y: 0 })
+
+  // CTA button chase
+  useEffect(() => {
+    let id: number
+    const tick = () => {
+      ctaCurr.current.x += (ctaTarget.current.x - ctaCurr.current.x) * 0.07
+      ctaCurr.current.y += (ctaTarget.current.y - ctaCurr.current.y) * 0.07
+      setCtaXy({ x: ctaCurr.current.x, y: ctaCurr.current.y })
+      id = requestAnimationFrame(tick)
+    }
+    id = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(id)
+  }, [])
+
+  return (
+    <div style={{ paddingTop: '80px' }}>
+      {/* Why Owners Choose Us */}
+      <section style={{ background: '#FFFFFF', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30, borderTop: '1px solid #F0ECE4' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <ScrollReveal>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888', marginBottom: '1.2rem' }}>Why Choose Us</p>
+            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 52px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 'clamp(48px, 6vw, 80px)' }}>
+              The Meriden difference.
+            </h2>
+          </ScrollReveal>
+          <div className="why-grid">
+            {([
+              {
+                icon: (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
+                  </svg>
+                ),
+                title: 'Earn 50% More',
+                body: 'Our dynamic pricing engine and multi-platform distribution strategy consistently deliver 50% more revenue than self-managing. We optimise nightly rates in real time based on demand, seasonality, and local events — so every night earns exactly what it should.',
+              },
+              {
+                icon: (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
+                  </svg>
+                ),
+                title: 'Professional Listings',
+                body: 'Every listing starts with premium photography and professionally written, platform-optimised copy paired with a pricing strategy built to convert. We then continuously monitor and adjust each listing so it consistently outranks the competition across every channel.',
+              },
+              {
+                icon: (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                ),
+                title: 'Full-Service Guest Management',
+                body: 'Our local teams are on standby around the clock to manage every stage of the guest journey. From the first enquiry and seamless check-in through to in-stay support and post-stay review responses — every touchpoint is handled professionally on your behalf.',
+              },
+              {
+                icon: (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                  </svg>
+                ),
+                title: 'Passive Income',
+                body: 'No late-night calls. No maintenance emergencies. No unexpected surprises at all. Just clear, consistent monthly payouts deposited directly to you while your property earns around the clock.',
+              },
+              {
+                icon: (
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
+                  </svg>
+                ),
+                title: 'Stress-Free Management',
+                body: 'From compliance and cleaning coordination to dynamic pricing and maintenance scheduling — we run the entire operation end to end, so you own a high-performing asset without carrying the day-to-day burden of managing one.',
+              },
+            ] as const).map((item, i) => (
+              <ScrollReveal key={item.title} delay={i * 80}>
+                <TiltCard style={{ border: '1px solid #E4D9BE', borderRadius: '20px', padding: 'clamp(28px, 3vw, 44px)', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#F7F4EE', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px', flexShrink: 0 }}>
+                    {item.icon}
+                  </div>
+                  <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 600, fontSize: 'clamp(15px, 1.4vw, 19px)', color: '#000', letterSpacing: '-0.01em', lineHeight: 1.25, marginBottom: '14px' }}>
+                    {item.title}
+                  </h3>
+                  <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#666', lineHeight: 1.8, flex: 1 }}>
+                    {item.body}
+                  </p>
+                </TiltCard>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* How It Works */}
+      <section style={{ background: '#F1EDE4', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '1.5rem' }}>The Process</p>
+          <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 52px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 'clamp(48px, 6vw, 80px)' }}>
+            Listed and earning<br />in as little as <CountUp end={7} /> days.
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '32px' }}>
+            {[
+              { n: '01', title: 'Free Revenue Assessment', body: "We conduct a detailed assessment of your property's earning potential, drawing on location data, comparable listings, seasonality patterns, and live market demand — all at no cost and no obligation." },
+              { n: '02', title: 'Onboarding & Styling', body: 'We guide you through every step of onboarding, offering tailored advice on furnishing, layout, and presentation to ensure the space photographs beautifully and consistently attracts high-quality guests.' },
+              { n: '03', title: 'Professional Listing Launch', body: 'We handle professional photography, write compelling platform-optimised copy, calibrate your opening pricing strategy, and launch simultaneously across Airbnb, Booking.com, VRBO, Stayz, and more.' },
+              { n: '04', title: 'Full Guest Management', body: 'From the first enquiry through check-in, in-stay requests, and post-stay reviews — every guest interaction is managed by our team, around the clock, without exception, and without involving you.' },
+              { n: '05', title: 'Monthly Payouts', body: 'Each month you receive a clear, itemised performance statement alongside your direct payout. No chasing, no surprises — just transparent reporting and consistent income while your property continues working for you.' },
+            ].map((step, i) => (
+              <ScrollReveal key={step.n} delay={i * 100}>
+                <p style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(36px, 4vw, 56px)', color: '#E4D9BE', lineHeight: 1, marginBottom: '16px', letterSpacing: '-0.03em' }}>{step.n}</p>
+                <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 600, fontSize: 'clamp(14px, 1.2vw, 17px)', color: '#000', marginBottom: '10px' }}>{step.title}</h3>
+                <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', color: '#555', lineHeight: 1.75 }}>{step.body}</p>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* Packages */}
+      <section id="packages" style={{ background: '#FFFFFF', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '1.5rem' }}>Our Packages</p>
+          <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(32px, 4vw, 64px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.05, marginBottom: 'clamp(48px, 6vw, 80px)' }}>
+            Property Management,<br />Done Properly.
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
+            {/* Essentials */}
+            <TiltCard style={{ border: '1px solid #E4D9BE', borderRadius: '16px', padding: 'clamp(32px, 4vw, 48px)', display: 'flex', flexDirection: 'column' }}>
+              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '8px' }}>Essentials</p>
+              <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(22px, 2.5vw, 32px)', color: '#000' }}>10%</h3>
+              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: '13px', color: '#666', marginTop: '4px', marginBottom: '1.5rem' }}>of net revenue + GST</p>
+              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#444', lineHeight: 1.7, marginBottom: '2rem', flexGrow: 1 }}>Designed for owners who handle their own cleaning and maintenance, but want proven experts managing revenue strategy, platform distribution, and the full guest experience from first enquiry to final review.</p>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '2.5rem', flexGrow: 1 }}>
+                {['Revenue forecasting & dynamic pricing', 'Multi-platform distribution', 'Professional photography & listing creation', 'Calendar & booking management', 'Guest screening & 24/7 support', 'Monthly performance reports'].map(item => (
+                  <li key={item} style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: '13px', color: '#444', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#2A2927', marginTop: '7px', flexShrink: 0 }} />{item}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => { onNavigate('list'); window.scrollTo({ top: 0 }) }} style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 600, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#2A2927', border: '1px solid #2A2927', background: 'transparent', padding: '14px 24px', borderRadius: '8px', cursor: 'pointer', transition: 'background 0.2s, color 0.2s' }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#2A2927'; e.currentTarget.style.color = '#fff' }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#2A2927' }}>
+                Get Started
+              </button>
+            </TiltCard>
+
+            {/* Signature */}
+            <TiltCard style={{ border: '1px solid #2A2927', borderRadius: '16px', padding: 'clamp(32px, 4vw, 48px)', display: 'flex', flexDirection: 'column', background: '#2A2927' }}>
+              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>Signature</p>
+              <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(22px, 2.5vw, 32px)', color: '#fff' }}>16%</h3>
+              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginTop: '4px', marginBottom: '1.5rem' }}>of net revenue + GST</p>
+              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, marginBottom: '2rem', flexGrow: 1 }}>Our most comprehensive offering — complete, truly hands-off management from arrival to departure. Includes everything in Essentials, plus professional cleaning, full linen service, and dedicated on-ground Sydney management after every stay.</p>
+              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '2.5rem', flexGrow: 1 }}>
+                {['Everything in Essentials', 'Professional cleaning & full linen service', 'Maintenance coordination & minor repairs', 'Stock replenishment & inventory management', 'Biannual deep cleans', 'On-ground Sydney property management'].map(item => (
+                  <li key={item} style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#E4D9BE', marginTop: '7px', flexShrink: 0 }} />{item}
+                  </li>
+                ))}
+              </ul>
+              <button onClick={() => { onNavigate('list'); window.scrollTo({ top: 0 }) }} style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 600, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#2A2927', background: '#E4D9BE', border: 'none', padding: '14px 24px', borderRadius: '8px', cursor: 'pointer', transition: 'opacity 0.2s' }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
+                Get Started
+              </button>
+            </TiltCard>
+          </div>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', color: '#888', marginTop: '24px', textAlign: 'center' }}>$1,000 one-time onboarding fee + GST · No hidden fees</p>
+        </div>
+      </section>
+
+
+      {/* Featured In */}
+      <section style={{ background: '#FFFFFF', padding: 'clamp(48px, 6vw, 72px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30, borderTop: '1px solid #F0ECE4' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#aaa', textAlign: 'center', marginBottom: '40px' }}>Listed & Distributed On</p>
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 'clamp(32px, 5vw, 72px)' }}>
+            {[
+              { src: '/logos/airbnb.webp',         alt: 'Airbnb',          h: 30 },
+              { src: '/logos/bookingcom.png',       alt: 'Booking.com',     h: 28 },
+              { src: '/logos/vrbo.png',             alt: 'VRBO',            h: 30 },
+              { src: '/logos/stayz.png',            alt: 'Stayz',           h: 30 },
+              { src: '/logos/marriottbonvoy.png',   alt: 'Marriott Bonvoy', h: 34 },
+              { src: '/logos/google.webp',          alt: 'Google',          h: 28 },
+            ].map(({ src, alt, h }) => (
+              <img key={alt} src={src} alt={alt} style={{ height: `${h}px`, objectFit: 'contain' }} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* Testimonials */}
+      <section style={{ background: '#2A2927', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <ScrollReveal>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '1.2rem' }}>Owner Stories</p>
+            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 52px)', color: '#f0ece4', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 'clamp(48px, 6vw, 80px)' }}>
+              What our owners say.
+            </h2>
+          </ScrollReveal>
+          <div className="testi-grid">
+            {([
+              {
+                quote: "I spent two years managing it myself, convinced I had it under control. The first month with Meriden showed me exactly what I'd been leaving on the table. Their photography transformed the listing overnight and the pricing strategy operates at a level I simply didn't have access to on my own. The results haven't stopped climbing since.",
+                name: 'Gerald M.',
+                location: 'Surry Hills',
+                bed: '2 bed · 2 bath',
+                from: '$5,200',
+                to: '$9,200',
+              },
+              {
+                quote: "I was genuinely unsure whether a one-bedroom could justify professional management. That doubt lasted about a week. Bookings filled faster than I'd ever seen, the calibre of guests improved noticeably, and I haven't had to deal with a single issue personally since handing over the keys. It's completely passive now.",
+                name: 'Jack S.',
+                location: 'Southbank',
+                bed: '1 bed · 1 bath',
+                from: '$2,300',
+                to: '$4,300',
+              },
+              {
+                quote: "I had a long-term tenant for three years before making the switch. The late-night maintenance calls, the pricing guesswork, the endless back-and-forth with guests — all of it just stopped. Meriden absorbed the entire operation and the income has consistently outpaced anything I achieved managing it myself. I genuinely wish I had made the switch sooner.",
+                name: 'Beena N.',
+                location: 'Darlinghurst',
+                bed: '2 bed · 2 bath',
+                from: '$5,000',
+                to: '$8,800',
+              },
+            ] as const).map((t, i) => (
+              <ScrollReveal key={t.name} delay={i * 100}>
+                <TiltCard style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: 'clamp(32px, 3.5vw, 48px)', display: 'flex', flexDirection: 'column', height: '100%' }}>
+                  <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '72px', lineHeight: 0.75, color: '#c9b99a', display: 'block', marginBottom: '24px' }}>"</span>
+                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontWeight: 300, fontSize: 'clamp(16px, 1.4vw, 18px)', color: '#e0d9ce', lineHeight: 1.8, flex: 1, marginBottom: '32px' }}>
+                    {t.quote}
+                  </p>
+                  <div>
+                    <div style={{ width: '32px', height: '1px', background: '#c9b99a', marginBottom: '20px' }} />
+                    <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 500, fontSize: '13px', letterSpacing: '0.08em', color: '#f0ece4', marginBottom: '4px' }}>{t.name}</p>
+                    <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '16px' }}>{t.location} · {t.bed}</p>
+                    <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', letterSpacing: '0.02em', color: '#c9b99a' }}>
+                      {t.from} <span style={{ opacity: 0.5, margin: '0 6px' }}>→</span> {t.to}<span style={{ fontSize: '11px', opacity: 0.6 }}> /mo</span>
+                    </p>
+                  </div>
+                </TiltCard>
+              </ScrollReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* FAQ */}
+      <section style={{ background: '#FFFFFF', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30 }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(48px, 8vw, 100px)', alignItems: 'start' }}>
+          <div>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '1.5rem' }}>FAQs</p>
+            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 52px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
+              Questions we<br />get asked most.
+            </h2>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#888', lineHeight: 1.8 }}>
+              Can't find what you're looking for? Reach out at{' '}
+              <a href="mailto:stay@themeridencollection.com" style={{ color: '#2A2927', fontWeight: 400, textDecoration: 'none', borderBottom: '1px solid #2A2927' }}>stay@themeridencollection.com</a>
+            </p>
+          </div>
+          <div>
+            {FAQ_ITEMS.map((item, i) => (
+              <FaqItem
+                key={item.q}
+                q={item.q}
+                a={item.a}
+                open={openFaqIndex === i}
+                onToggle={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+      {/* CTA */}
+      <section
+        ref={ctaSectionRef as React.RefObject<HTMLElement>}
+        id="inquire"
+        style={{ background: '#2A2927', padding: 'clamp(80px, 12vw, 160px) clamp(24px, 4vw, 64px)', textAlign: 'center', position: 'relative', zIndex: 30 }}
+        onMouseMove={e => {
+          const r = ctaSectionRef.current?.getBoundingClientRect(); if (!r) return
+          ctaTarget.current = {
+            x: (e.clientX - (r.left + r.width / 2)) * 0.45,
+            y: (e.clientY - (r.top + r.height / 2)) * 0.45,
+          }
+        }}
+        onMouseLeave={() => { ctaTarget.current = { x: 0, y: 0 } }}
+      >
+        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 4vw, 56px)', color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
+            Ready to maximise your Sydney property?
+          </h2>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(14px, 1.3vw, 17px)', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, marginBottom: '2.5rem' }}>
+            Let's start with a free, no-obligation revenue assessment. Find out exactly what your property could be earning.
+          </p>
+          <div style={{ display: 'inline-block', transform: `translate(${ctaXy.x}px,${ctaXy.y}px)` }}>
+            <button
+              onClick={() => { onNavigate('list'); window.scrollTo({ top: 0 }) }}
+              style={{ display: 'inline-block', fontFamily: "'Josefin Sans', sans-serif", fontWeight: 600, fontSize: '13px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#2A2927', background: '#E4D9BE', padding: '16px 40px', borderRadius: '8px', border: 'none', cursor: 'pointer', transition: 'opacity 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+            >
+              Book a Free Assessment
+            </button>
+          </div>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(12px, 1vw, 14px)', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.03em', marginTop: '20px', lineHeight: 1.6 }}>
+            Even if your property is currently tenanted, we can help you plan the transition.
+          </p>
+        </div>
+      </section>
+    </div>
+  )
+}
+
+// ─── Home Page ────────────────────────────────────────────────────────────────
+function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
+  usePageMeta('The Meriden Collection | Premium STR Management in Sydney', 'Sydney\'s premium short-term rental management company. Earn up to 50% more than long-term leasing — fully managed, hassle-free.')
+  const [heroMouse, setHeroMouse] = useState({ x: 0, y: 0 })
   const bldLightTarget = useRef({ x: 50, y: 50 })
   const bldLightCurr = useRef({ x: 50, y: 50 })
   const [bldLight, setBldLight] = useState({ x: 50, y: 50 })
@@ -1478,19 +1801,6 @@ function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
     timers.push(setTimeout(() => setHeroVisible(true), LIFT_AT + 1900))
     timers.push(setTimeout(() => setLiftDone(true), LIFT_AT + 2100))
     return () => timers.forEach(clearTimeout)
-  }, [])
-
-  // CTA button chase
-  useEffect(() => {
-    let id: number
-    const tick = () => {
-      ctaCurr.current.x += (ctaTarget.current.x - ctaCurr.current.x) * 0.07
-      ctaCurr.current.y += (ctaTarget.current.y - ctaCurr.current.y) * 0.07
-      setCtaXy({ x: ctaCurr.current.x, y: ctaCurr.current.y })
-      id = requestAnimationFrame(tick)
-    }
-    id = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(id)
   }, [])
 
   // Building light RAF
@@ -1737,82 +2047,11 @@ function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
         </div>
       </section>
 
-      {/* Packages */}
-      <section id="packages" style={{ background: '#FFFFFF', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30 }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '1.5rem' }}>Our Packages</p>
-          <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(32px, 4vw, 64px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.05, marginBottom: 'clamp(48px, 6vw, 80px)' }}>
-            Property Management,<br />Done Properly.
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-            {/* Essentials */}
-            <TiltCard style={{ border: '1px solid #E4D9BE', borderRadius: '16px', padding: 'clamp(32px, 4vw, 48px)', display: 'flex', flexDirection: 'column' }}>
-              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '8px' }}>Essentials</p>
-              <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(22px, 2.5vw, 32px)', color: '#000' }}>10%</h3>
-              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: '13px', color: '#666', marginTop: '4px', marginBottom: '1.5rem' }}>of net revenue + GST</p>
-              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#444', lineHeight: 1.7, marginBottom: '2rem', flexGrow: 1 }}>Designed for owners who handle their own cleaning and maintenance, but want proven experts managing revenue strategy, platform distribution, and the full guest experience from first enquiry to final review.</p>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '2.5rem', flexGrow: 1 }}>
-                {['Revenue forecasting & dynamic pricing', 'Multi-platform distribution', 'Professional photography & listing creation', 'Calendar & booking management', 'Guest screening & 24/7 support', 'Monthly performance reports'].map(item => (
-                  <li key={item} style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: '13px', color: '#444', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#2A2927', marginTop: '7px', flexShrink: 0 }} />{item}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => { onNavigate('list'); window.scrollTo({ top: 0 }) }} style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 600, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#2A2927', border: '1px solid #2A2927', background: 'transparent', padding: '14px 24px', borderRadius: '8px', cursor: 'pointer', transition: 'background 0.2s, color 0.2s' }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#2A2927'; e.currentTarget.style.color = '#fff' }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#2A2927' }}>
-                Get Started
-              </button>
-            </TiltCard>
-
-            {/* Signature */}
-            <TiltCard style={{ border: '1px solid #2A2927', borderRadius: '16px', padding: 'clamp(32px, 4vw, 48px)', display: 'flex', flexDirection: 'column', background: '#2A2927' }}>
-              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>Signature</p>
-              <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(22px, 2.5vw, 32px)', color: '#fff' }}>16%</h3>
-              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.5)', marginTop: '4px', marginBottom: '1.5rem' }}>of net revenue + GST</p>
-              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.7, marginBottom: '2rem', flexGrow: 1 }}>Our most comprehensive offering — complete, truly hands-off management from arrival to departure. Includes everything in Essentials, plus professional cleaning, full linen service, and dedicated on-ground Sydney management after every stay.</p>
-              <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '2.5rem', flexGrow: 1 }}>
-                {['Everything in Essentials', 'Professional cleaning & full linen service', 'Maintenance coordination & minor repairs', 'Stock replenishment & inventory management', 'Biannual deep cleans', 'On-ground Sydney property management'].map(item => (
-                  <li key={item} style={{ fontFamily: "'Josefin Sans', sans-serif", fontSize: '13px', color: 'rgba(255,255,255,0.75)', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-                    <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: '#E4D9BE', marginTop: '7px', flexShrink: 0 }} />{item}
-                  </li>
-                ))}
-              </ul>
-              <button onClick={() => { onNavigate('list'); window.scrollTo({ top: 0 }) }} style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 600, fontSize: '13px', letterSpacing: '0.12em', textTransform: 'uppercase', color: '#2A2927', background: '#E4D9BE', border: 'none', padding: '14px 24px', borderRadius: '8px', cursor: 'pointer', transition: 'opacity 0.2s' }}
-                onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}>
-                Get Started
-              </button>
-            </TiltCard>
-          </div>
-          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', color: '#888', marginTop: '24px', textAlign: 'center' }}>$1,000 one-time onboarding fee + GST · No hidden fees</p>
-        </div>
-      </section>
-
-      {/* Featured In */}
-      <section style={{ background: '#FFFFFF', padding: 'clamp(48px, 6vw, 72px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30, borderTop: '1px solid #F0ECE4' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#aaa', textAlign: 'center', marginBottom: '40px' }}>Listed & Distributed On</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 'clamp(32px, 5vw, 72px)' }}>
-            {[
-              { src: '/logos/airbnb.webp',         alt: 'Airbnb',          h: 30 },
-              { src: '/logos/bookingcom.png',       alt: 'Booking.com',     h: 28 },
-              { src: '/logos/vrbo.png',             alt: 'VRBO',            h: 30 },
-              { src: '/logos/stayz.png',            alt: 'Stayz',           h: 30 },
-              { src: '/logos/marriottbonvoy.png',   alt: 'Marriott Bonvoy', h: 34 },
-              { src: '/logos/google.webp',          alt: 'Google',          h: 28 },
-            ].map(({ src, alt, h }) => (
-              <img key={alt} src={src} alt={alt} style={{ height: `${h}px`, objectFit: 'contain' }} />
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Traditional Lease vs Meriden STR Comparison */}
       <section style={{ background: '#F7F4EF', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30, borderTop: '1px solid #E8E2D9' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto' }}>
           <ScrollReveal>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888', marginBottom: '1.2rem' }}>The Numbers Don't Lie</p>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888', marginBottom: '1.2rem' }}>The Numbers Don’t Lie</p>
             <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(26px, 3vw, 46px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 'clamp(40px, 5vw, 64px)' }}>
               Why owners are leaving<br />long-term leasing behind.
             </h2>
@@ -1856,228 +2095,6 @@ function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
               </p>
             </div>
           </ScrollReveal>
-        </div>
-      </section>
-
-      {/* Why Owners Choose Us */}
-      <section style={{ background: '#FFFFFF', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30, borderTop: '1px solid #F0ECE4' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <ScrollReveal>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888', marginBottom: '1.2rem' }}>Why Choose Us</p>
-            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 52px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 'clamp(48px, 6vw, 80px)' }}>
-              The Meriden difference.
-            </h2>
-          </ScrollReveal>
-          <div className="why-grid">
-            {([
-              {
-                icon: (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>
-                  </svg>
-                ),
-                title: 'Earn 50% More',
-                body: 'Our dynamic pricing engine and multi-platform distribution strategy consistently deliver 50% more revenue than self-managing. We optimise nightly rates in real time based on demand, seasonality, and local events — so every night earns exactly what it should.',
-              },
-              {
-                icon: (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/>
-                  </svg>
-                ),
-                title: 'Professional Listings',
-                body: 'Every listing starts with premium photography and professionally written, platform-optimised copy paired with a pricing strategy built to convert. We then continuously monitor and adjust each listing so it consistently outranks the competition across every channel.',
-              },
-              {
-                icon: (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                ),
-                title: 'Full-Service Guest Management',
-                body: 'Our local teams are on standby around the clock to manage every stage of the guest journey. From the first enquiry and seamless check-in through to in-stay support and post-stay review responses — every touchpoint is handled professionally on your behalf.',
-              },
-              {
-                icon: (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
-                  </svg>
-                ),
-                title: 'Passive Income',
-                body: 'No late-night calls. No maintenance emergencies. No unexpected surprises at all. Just clear, consistent monthly payouts deposited directly to you while your property earns around the clock.',
-              },
-              {
-                icon: (
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
-                  </svg>
-                ),
-                title: 'Stress-Free Management',
-                body: 'From compliance and cleaning coordination to dynamic pricing and maintenance scheduling — we run the entire operation end to end, so you own a high-performing asset without carrying the day-to-day burden of managing one.',
-              },
-            ] as const).map((item, i) => (
-              <ScrollReveal key={item.title} delay={i * 80}>
-                <TiltCard style={{ border: '1px solid #E4D9BE', borderRadius: '20px', padding: 'clamp(28px, 3vw, 44px)', height: '100%', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#F7F4EE', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px', flexShrink: 0 }}>
-                    {item.icon}
-                  </div>
-                  <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 600, fontSize: 'clamp(15px, 1.4vw, 19px)', color: '#000', letterSpacing: '-0.01em', lineHeight: 1.25, marginBottom: '14px' }}>
-                    {item.title}
-                  </h3>
-                  <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#666', lineHeight: 1.8, flex: 1 }}>
-                    {item.body}
-                  </p>
-                </TiltCard>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials */}
-      <section style={{ background: '#2A2927', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30 }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <ScrollReveal>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '1.2rem' }}>Owner Stories</p>
-            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 52px)', color: '#f0ece4', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 'clamp(48px, 6vw, 80px)' }}>
-              What our owners say.
-            </h2>
-          </ScrollReveal>
-          <div className="testi-grid">
-            {([
-              {
-                quote: "I spent two years managing it myself, convinced I had it under control. The first month with Meriden showed me exactly what I'd been leaving on the table. Their photography transformed the listing overnight and the pricing strategy operates at a level I simply didn't have access to on my own. The results haven't stopped climbing since.",
-                name: 'Gerald M.',
-                location: 'Surry Hills',
-                bed: '2 bed · 2 bath',
-                from: '$5,200',
-                to: '$9,200',
-              },
-              {
-                quote: "I was genuinely unsure whether a one-bedroom could justify professional management. That doubt lasted about a week. Bookings filled faster than I'd ever seen, the calibre of guests improved noticeably, and I haven't had to deal with a single issue personally since handing over the keys. It's completely passive now.",
-                name: 'Jack S.',
-                location: 'Southbank',
-                bed: '1 bed · 1 bath',
-                from: '$2,300',
-                to: '$4,300',
-              },
-              {
-                quote: "I had a long-term tenant for three years before making the switch. The late-night maintenance calls, the pricing guesswork, the endless back-and-forth with guests — all of it just stopped. Meriden absorbed the entire operation and the income has consistently outpaced anything I achieved managing it myself. I genuinely wish I had made the switch sooner.",
-                name: 'Beena N.',
-                location: 'Darlinghurst',
-                bed: '2 bed · 2 bath',
-                from: '$5,000',
-                to: '$8,800',
-              },
-            ] as const).map((t, i) => (
-              <ScrollReveal key={t.name} delay={i * 100}>
-                <TiltCard style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.09)', borderRadius: '20px', padding: 'clamp(32px, 3.5vw, 48px)', display: 'flex', flexDirection: 'column', height: '100%' }}>
-                  <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: '72px', lineHeight: 0.75, color: '#c9b99a', display: 'block', marginBottom: '24px' }}>"</span>
-                  <p style={{ fontFamily: "'Cormorant Garamond', serif", fontStyle: 'italic', fontWeight: 300, fontSize: 'clamp(16px, 1.4vw, 18px)', color: '#e0d9ce', lineHeight: 1.8, flex: 1, marginBottom: '32px' }}>
-                    {t.quote}
-                  </p>
-                  <div>
-                    <div style={{ width: '32px', height: '1px', background: '#c9b99a', marginBottom: '20px' }} />
-                    <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 500, fontSize: '13px', letterSpacing: '0.08em', color: '#f0ece4', marginBottom: '4px' }}>{t.name}</p>
-                    <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.35)', marginBottom: '16px' }}>{t.location} · {t.bed}</p>
-                    <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', letterSpacing: '0.02em', color: '#c9b99a' }}>
-                      {t.from} <span style={{ opacity: 0.5, margin: '0 6px' }}>→</span> {t.to}<span style={{ fontSize: '11px', opacity: 0.6 }}> /mo</span>
-                    </p>
-                  </div>
-                </TiltCard>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section style={{ background: '#F1EDE4', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30 }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '1.5rem' }}>The Process</p>
-          <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 52px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 'clamp(48px, 6vw, 80px)' }}>
-            Listed and earning<br />in as little as <CountUp end={7} /> days.
-          </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '32px' }}>
-            {[
-              { n: '01', title: 'Free Revenue Assessment', body: "We conduct a detailed assessment of your property's earning potential, drawing on location data, comparable listings, seasonality patterns, and live market demand — all at no cost and no obligation." },
-              { n: '02', title: 'Onboarding & Styling', body: 'We guide you through every step of onboarding, offering tailored advice on furnishing, layout, and presentation to ensure the space photographs beautifully and consistently attracts high-quality guests.' },
-              { n: '03', title: 'Professional Listing Launch', body: 'We handle professional photography, write compelling platform-optimised copy, calibrate your opening pricing strategy, and launch simultaneously across Airbnb, Booking.com, VRBO, Stayz, and more.' },
-              { n: '04', title: 'Full Guest Management', body: 'From the first enquiry through check-in, in-stay requests, and post-stay reviews — every guest interaction is managed by our team, around the clock, without exception, and without involving you.' },
-              { n: '05', title: 'Monthly Payouts', body: 'Each month you receive a clear, itemised performance statement alongside your direct payout. No chasing, no surprises — just transparent reporting and consistent income while your property continues working for you.' },
-            ].map((step, i) => (
-              <ScrollReveal key={step.n} delay={i * 100}>
-                <p style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(36px, 4vw, 56px)', color: '#E4D9BE', lineHeight: 1, marginBottom: '16px', letterSpacing: '-0.03em' }}>{step.n}</p>
-                <h3 style={{ fontFamily: "'Cinzel', serif", fontWeight: 600, fontSize: 'clamp(14px, 1.2vw, 17px)', color: '#000', marginBottom: '10px' }}>{step.title}</h3>
-                <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '13px', color: '#555', lineHeight: 1.75 }}>{step.body}</p>
-              </ScrollReveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section style={{ background: '#FFFFFF', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30 }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 'clamp(48px, 8vw, 100px)', alignItems: 'start' }}>
-          <div>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '1.5rem' }}>FAQs</p>
-            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 3.5vw, 52px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
-              Questions we<br />get asked most.
-            </h2>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#888', lineHeight: 1.8 }}>
-              Can't find what you're looking for? Reach out at{' '}
-              <a href="mailto:stay@themeridencollection.com" style={{ color: '#2A2927', fontWeight: 400, textDecoration: 'none', borderBottom: '1px solid #2A2927' }}>stay@themeridencollection.com</a>
-            </p>
-          </div>
-          <div>
-            {FAQ_ITEMS.map((item, i) => (
-              <FaqItem
-                key={item.q}
-                q={item.q}
-                a={item.a}
-                open={openFaqIndex === i}
-                onToggle={() => setOpenFaqIndex(openFaqIndex === i ? null : i)}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section
-        ref={ctaSectionRef as React.RefObject<HTMLElement>}
-        id="inquire"
-        style={{ background: '#2A2927', padding: 'clamp(80px, 12vw, 160px) clamp(24px, 4vw, 64px)', textAlign: 'center', position: 'relative', zIndex: 30 }}
-        onMouseMove={e => {
-          const r = ctaSectionRef.current?.getBoundingClientRect(); if (!r) return
-          ctaTarget.current = {
-            x: (e.clientX - (r.left + r.width / 2)) * 0.45,
-            y: (e.clientY - (r.top + r.height / 2)) * 0.45,
-          }
-        }}
-        onMouseLeave={() => { ctaTarget.current = { x: 0, y: 0 } }}
-      >
-        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
-          <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 4vw, 56px)', color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
-            Ready to maximise your Sydney property?
-          </h2>
-          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(14px, 1.3vw, 17px)', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, marginBottom: '2.5rem' }}>
-            Let's start with a free, no-obligation revenue assessment. Find out exactly what your property could be earning.
-          </p>
-          <div style={{ display: 'inline-block', transform: `translate(${ctaXy.x}px,${ctaXy.y}px)` }}>
-            <button
-              onClick={() => { onNavigate('list'); window.scrollTo({ top: 0 }) }}
-              style={{ display: 'inline-block', fontFamily: "'Josefin Sans', sans-serif", fontWeight: 600, fontSize: '13px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#2A2927', background: '#E4D9BE', padding: '16px 40px', borderRadius: '8px', border: 'none', cursor: 'pointer', transition: 'opacity 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
-              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
-            >
-              Book a Free Assessment
-            </button>
-          </div>
-          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(12px, 1vw, 14px)', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.03em', marginTop: '20px', lineHeight: 1.6 }}>
-            Even if your property is currently tenanted, we can help you plan the transition.
-          </p>
         </div>
       </section>
     </>
@@ -2165,8 +2182,8 @@ export default function App() {
         {/* Desktop nav links */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
           <div style={{ display: 'none' }} className="desktop-nav">
-            {(['home', 'about', 'list', 'book', 'contact'] as Page[]).map(p => {
-              const label = p === 'home' ? 'Services' : p === 'about' ? 'About' : p === 'list' ? 'Partner with Us' : p === 'book' ? 'Book a Stay' : 'Contact'
+            {(['home', 'services', 'about', 'list', 'book', 'contact'] as Page[]).map(p => {
+              const label = p === 'home' ? 'Home' : p === 'services' ? 'Services' : p === 'about' ? 'About' : p === 'list' ? 'Partner with Us' : p === 'book' ? 'Book a Stay' : 'Contact'
               return (
                 <button key={p} onClick={() => navigate(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Josefin Sans', sans-serif", fontWeight: 400, fontSize: '12px', letterSpacing: '0.12em', textTransform: 'uppercase', color: page === p ? effectiveNavColor : `${effectiveNavColor}88`, transition: 'color 0.2s', padding: '4px 0' }}>{label}</button>
               )
@@ -2190,7 +2207,8 @@ export default function App() {
       {menuOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 99999, background: '#FFFFFF', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2rem' }}>
           {([
-            { label: 'Services', page: 'home' as Page },
+            { label: 'Home', page: 'home' as Page },
+                { label: 'Services', page: 'services' as Page },
             { label: 'About', page: 'about' as Page },
             { label: 'Partner with Us', page: 'list' as Page },
             { label: 'Book a Stay', page: 'book' as Page },
@@ -2222,6 +2240,7 @@ export default function App() {
 
       {/* Page content */}
       {page === 'home' && <HomePage onNavigate={navigate} />}
+      {page === 'services' && <ServicesPage onNavigate={navigate} />}
       {page === 'about' && <AboutPage onNavigate={navigate} />}
       {page === 'list' && <ListPage onBack={() => navigate('home')} />}
       {page === 'book' && <BookPage onViewListing={(id, images, amenities) => { navigate('listing', id, images, amenities); window.scrollTo({ top: 0 }) }} />}
