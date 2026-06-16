@@ -42,7 +42,7 @@ const GALLERY_PHOTOS = [
 const CHAR_INTERVAL = 55
 const TYPE_START = 600
 
-type Page = 'home' | 'services' | 'list' | 'book' | 'contact' | 'listing' | 'privacy' | 'terms' | 'about'
+type Page = 'home' | 'services' | 'list' | 'book' | 'contact' | 'listing' | 'privacy' | 'terms' | 'about' | 'schedule'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function smoothstep(t: number) { return t * t * (3 - 2 * t) }
@@ -720,10 +720,9 @@ function CalendlyEmbed() {
 }
 
 // ─── List with Us Page ───────────────────────────────────────────────────────
-function ListPage({ onBack }: { onBack: () => void }) {
+function ListPage({ onBack, onSchedule }: { onBack: () => void; onSchedule: () => void }) {
   usePageMeta('Partner with Us | The Meriden Collection', 'Book a free revenue assessment with The Meriden Collection. Sydney property owners are switching from long-term leases and earning significantly more.')
   const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', bedrooms: '', package: '', notes: '', weeklyRent: '' })
-  const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [weeklyRent, setWeeklyRent] = useState(700)
 
@@ -744,12 +743,12 @@ function ListPage({ onBack }: { onBack: () => void }) {
       })
     } catch (_) {}
     setSubmitting(false)
-    setSubmitted(true)
+    onSchedule()
   }
 
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingTop: '100px' }}>
-      <div style={{ maxWidth: submitted ? '860px' : '680px', margin: '0 auto', padding: 'clamp(40px, 6vw, 80px) clamp(24px, 4vw, 48px)', transition: 'max-width 0.3s ease' }}>
+      <div style={{ maxWidth: '680px', margin: '0 auto', padding: 'clamp(40px, 6vw, 80px) clamp(24px, 4vw, 48px)' }}>
         <button
           onClick={onBack}
           style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#888', marginBottom: '48px', padding: 0, transition: 'color 0.2s' }}
@@ -760,40 +759,7 @@ function ListPage({ onBack }: { onBack: () => void }) {
           Back
         </button>
 
-        {submitted ? (
-          <div style={{ animation: 'fadeUp 0.5s ease forwards' }}>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '16px' }}>Almost There</p>
-            <h1 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(24px, 3vw, 40px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '12px' }}>
-              Schedule Your Assessment
-            </h1>
-            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#666', lineHeight: 1.75, marginBottom: '32px' }}>
-              Pick a time that suits you and we'll take it from there.
-            </p>
-            <CalendlyEmbed />
-
-            <div style={{ marginTop: '56px', paddingTop: '48px', borderTop: '1px solid #E4D9BE' }}>
-              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '16px' }}>What to Expect</p>
-              <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 600, fontSize: 'clamp(18px, 2vw, 24px)', color: '#000', letterSpacing: '-0.01em', lineHeight: 1.25, marginBottom: '32px' }}>
-                During your 30-minute consultation, we'll cover:
-              </h2>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '18px' }}>
-                {[
-                  'Whether your property is suitable for short-term stays',
-                  'Your property\'s earning potential based on location and size',
-                  'Estimated market positioning and nightly rate range',
-                  'Building and strata considerations specific to your property',
-                  'Management options, packages, and next steps',
-                ].map(item => (
-                  <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
-                    <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2A2927', flexShrink: 0, marginTop: '7px' }} />
-                    <span style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#555', lineHeight: 1.75, letterSpacing: '0.01em' }}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        ) : (
-          <>
+        <>
             {/* Social proof */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '40px' }}>
               {[
@@ -930,12 +896,60 @@ function ListPage({ onBack }: { onBack: () => void }) {
               </p>
             </form>
           </>
-        )}
       </div>
     </div>
   )
 }
 
+// ─── Schedule Page ────────────────────────────────────────────────────────────
+function SchedulePage({ onBack }: { onBack: () => void }) {
+  usePageMeta('Schedule Your Assessment | The Meriden Collection', 'Book a free 30-minute revenue assessment with The Meriden Collection team.')
+  return (
+    <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingTop: '100px' }}>
+      <div style={{ maxWidth: '860px', margin: '0 auto', padding: 'clamp(40px, 6vw, 80px) clamp(24px, 4vw, 48px)' }}>
+        <button
+          onClick={onBack}
+          style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#888', marginBottom: '48px', padding: 0, transition: 'color 0.2s' }}
+          onMouseEnter={e => (e.currentTarget.style.color = '#000')}
+          onMouseLeave={e => (e.currentTarget.style.color = '#888')}
+        >
+          <ArrowLeft size={14} />
+          Back
+        </button>
+        <div style={{ animation: 'fadeUp 0.5s ease forwards' }}>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '16px' }}>Almost There</p>
+          <h1 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(24px, 3vw, 40px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '12px' }}>
+            Schedule Your Assessment
+          </h1>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#666', lineHeight: 1.75, marginBottom: '32px' }}>
+            Pick a time that suits you and we'll take it from there.
+          </p>
+          <CalendlyEmbed />
+          <div style={{ marginTop: '56px', paddingTop: '48px', borderTop: '1px solid #E4D9BE' }}>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#888', marginBottom: '16px' }}>What to Expect</p>
+            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 600, fontSize: 'clamp(18px, 2vw, 24px)', color: '#000', letterSpacing: '-0.01em', lineHeight: 1.25, marginBottom: '32px' }}>
+              During your 30-minute consultation, we'll cover:
+            </h2>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '18px' }}>
+              {[
+                'Whether your property is suitable for short-term stays',
+                "Your property's earning potential based on location and size",
+                'Estimated market positioning and nightly rate range',
+                'Building and strata considerations specific to your property',
+                'Management options, packages, and next steps',
+              ].map(item => (
+                <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '14px' }}>
+                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#2A2927', flexShrink: 0, marginTop: '7px' }} />
+                  <span style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '14px', color: '#555', lineHeight: 1.75, letterSpacing: '0.01em' }}>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // ─── Hostaway Calendar Widget ─────────────────────────────────────────────────
 function HostawayCalendar({ listingId }: { listingId: number }) {
@@ -2161,6 +2175,7 @@ const PAGE_PATHS: Record<Page, string> = {
   services: '/services',
   about: '/about',
   list: '/partner',
+  schedule: '/schedule',
   book: '/book',
   contact: '/contact',
   listing: '/listing',
@@ -2322,7 +2337,8 @@ export default function App() {
       {page === 'home' && <HomePage onNavigate={navigate} />}
       {page === 'services' && <ServicesPage onNavigate={navigate} />}
       {page === 'about' && <AboutPage onNavigate={navigate} />}
-      {page === 'list' && <ListPage onBack={() => navigate('home')} />}
+      {page === 'list' && <ListPage onBack={() => navigate('home')} onSchedule={() => { navigate('schedule'); window.scrollTo({ top: 0 }) }} />}
+      {page === 'schedule' && <SchedulePage onBack={() => navigate('list')} />}
       {page === 'book' && <BookPage onViewListing={(id, images, amenities) => { navigate('listing', id, images, amenities); window.scrollTo({ top: 0 }) }} />}
       {page === 'contact' && <ContactPage onBack={() => navigate('home')} />}
       {page === 'privacy' && <PrivacyPolicyPage onBack={() => navigate('home')} />}
