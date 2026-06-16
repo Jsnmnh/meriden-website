@@ -2156,8 +2156,25 @@ function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
 }
 
 // ─── App (root) ───────────────────────────────────────────────────────────────
+const PAGE_PATHS: Record<Page, string> = {
+  home: '/',
+  services: '/services',
+  about: '/about',
+  list: '/partner',
+  book: '/book',
+  contact: '/contact',
+  listing: '/listing',
+  privacy: '/privacy',
+  terms: '/terms',
+}
+
+function pathToPage(pathname: string): Page {
+  const entry = Object.entries(PAGE_PATHS).find(([, path]) => path === pathname)
+  return (entry?.[0] as Page) ?? 'home'
+}
+
 export default function App() {
-  const [page, setPage] = useState<Page>('home')
+  const [page, setPage] = useState<Page>(() => pathToPage(window.location.pathname))
   const [menuOpen, setMenuOpen] = useState(false)
   const [navColor, setNavColor] = useState(DARK_COLOR)
   const [currentListingId, setCurrentListingId] = useState<number | null>(null)
@@ -2193,7 +2210,16 @@ export default function App() {
     }
   }, [])
 
+  // Sync browser back/forward buttons
+  useEffect(() => {
+    const onPop = () => setPage(pathToPage(window.location.pathname))
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
+
   const navigate = (p: Page, listingId?: number, listingImages?: Array<{ url: string; sortOrder?: number }>, listingAmenities?: Array<{ amenityName: string }>) => {
+    const path = PAGE_PATHS[p]
+    window.history.pushState({}, '', path)
     setPage(p)
     setMenuOpen(false)
     if (listingId !== undefined) setCurrentListingId(listingId)
