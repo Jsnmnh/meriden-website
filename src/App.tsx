@@ -1787,6 +1787,10 @@ function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
   const darkSectionRef = useRef<HTMLDivElement>(null)
   const galleryRef = useRef<HTMLElement>(null)
   const innerHouseRef = useRef<HTMLDivElement>(null)
+  const ctaSectionRef = useRef<HTMLElement>(null)
+  const ctaTarget = useRef({ x: 0, y: 0 })
+  const ctaCurr = useRef({ x: 0, y: 0 })
+  const [ctaXy, setCtaXy] = useState({ x: 0, y: 0 })
 
   // Preloader
   useEffect(() => {
@@ -1831,6 +1835,19 @@ function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // CTA button chase
+  useEffect(() => {
+    let id: number
+    const tick = () => {
+      ctaCurr.current.x += (ctaTarget.current.x - ctaCurr.current.x) * 0.07
+      ctaCurr.current.y += (ctaTarget.current.y - ctaCurr.current.y) * 0.07
+      setCtaXy({ x: ctaCurr.current.x, y: ctaCurr.current.y })
+      id = requestAnimationFrame(tick)
+    }
+    id = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(id)
   }, [])
 
   // House scroll — building exits downward as user scrolls, keeping hero text visible
@@ -2095,6 +2112,43 @@ function HomePage({ onNavigate }: { onNavigate: (p: Page) => void }) {
               </p>
             </div>
           </ScrollReveal>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section
+        ref={ctaSectionRef as React.RefObject<HTMLElement>}
+        id="inquire"
+        style={{ background: '#2A2927', padding: 'clamp(80px, 12vw, 160px) clamp(24px, 4vw, 64px)', textAlign: 'center', position: 'relative', zIndex: 30 }}
+        onMouseMove={e => {
+          const r = ctaSectionRef.current?.getBoundingClientRect(); if (!r) return
+          ctaTarget.current = {
+            x: (e.clientX - (r.left + r.width / 2)) * 0.45,
+            y: (e.clientY - (r.top + r.height / 2)) * 0.45,
+          }
+        }}
+        onMouseLeave={() => { ctaTarget.current = { x: 0, y: 0 } }}
+      >
+        <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+          <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 4vw, 56px)', color: '#fff', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '1.5rem' }}>
+            Ready to maximise your Sydney property?
+          </h2>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(14px, 1.3vw, 17px)', color: 'rgba(255,255,255,0.65)', lineHeight: 1.7, marginBottom: '2.5rem' }}>
+            Let's start with a free, no-obligation revenue assessment. Find out exactly what your property could be earning.
+          </p>
+          <div style={{ display: 'inline-block', transform: `translate(${ctaXy.x}px,${ctaXy.y}px)` }}>
+            <button
+              onClick={() => { onNavigate('list'); window.scrollTo({ top: 0 }) }}
+              style={{ display: 'inline-block', fontFamily: "'Josefin Sans', sans-serif", fontWeight: 600, fontSize: '13px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#2A2927', background: '#E4D9BE', padding: '16px 40px', borderRadius: '8px', border: 'none', cursor: 'pointer', transition: 'opacity 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.opacity = '0.85')}
+              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+            >
+              Book a Free Assessment
+            </button>
+          </div>
+          <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(12px, 1vw, 14px)', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.03em', marginTop: '20px', lineHeight: 1.6 }}>
+            Even if your property is currently tenanted, we can help you plan the transition.
+          </p>
         </div>
       </section>
     </>
