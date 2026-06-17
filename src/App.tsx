@@ -743,6 +743,13 @@ function ListPage({ onBack, onSchedule }: { onBack: () => void; onSchedule: () =
       })
     } catch (_) {}
     setSubmitting(false)
+    if (typeof (window as any).gtag === 'function') {
+      ;(window as any).gtag('event', 'conversion', {
+        send_to: 'AW-18238421103/Z-1kCPqDyb4cEO_w4PhD',
+        value: 1.0,
+        currency: 'AUD',
+      })
+    }
     onSchedule()
   }
 
@@ -904,6 +911,16 @@ function ListPage({ onBack, onSchedule }: { onBack: () => void; onSchedule: () =
 // ─── Schedule Page ────────────────────────────────────────────────────────────
 function SchedulePage({ onBack, onThankyou }: { onBack: () => void; onThankyou: () => void }) {
   usePageMeta('Schedule Your Assessment | The Meriden Collection', 'Book a free 30-minute revenue assessment with The Meriden Collection team.')
+
+  useEffect(() => {
+    if (typeof (window as any).gtag === 'function') {
+      ;(window as any).gtag('event', 'conversion', {
+        send_to: 'AW-18238421103/vzOhCK3oisAcEO_w4PhD',
+        value: 1.0,
+        currency: 'AUD',
+      })
+    }
+  }, [])
 
   useEffect(() => {
     const handler = (e: MessageEvent) => {
