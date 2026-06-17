@@ -1712,7 +1712,6 @@ function ServicesPage({ onNavigate }: { onNavigate: (p: Page) => void }) {
               { src: '/logos/bookingcom.png',       alt: 'Booking.com',     h: 28 },
               { src: '/logos/vrbo.png',             alt: 'VRBO',            h: 30 },
               { src: '/logos/stayz.png',            alt: 'Stayz',           h: 30 },
-              { src: '/logos/marriottbonvoy.png',   alt: 'Marriott Bonvoy', h: 34 },
               { src: '/logos/google.webp',          alt: 'Google',          h: 28 },
             ].map(({ src, alt, h }) => (
               <img key={alt} src={src} alt={alt} style={{ height: `${h}px`, objectFit: 'contain' }} />
