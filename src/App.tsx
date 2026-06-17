@@ -963,6 +963,17 @@ function SchedulePage({ onBack, onThankyou }: { onBack: () => void; onThankyou: 
 // ─── Thank You Page ───────────────────────────────────────────────────────────
 function ThankYouPage({ onNavigate }: { onNavigate: (p: Page) => void }) {
   usePageMeta('You\'re Booked | The Meriden Collection', 'Thank you for booking a revenue assessment with The Meriden Collection.')
+
+  useEffect(() => {
+    if (typeof (window as any).gtag === 'function') {
+      ;(window as any).gtag('event', 'conversion', {
+        send_to: 'AW-18238421103/RXKOCMaEosAcEO_w4PhD',
+        value: 1.0,
+        currency: 'AUD',
+      })
+    }
+  }, [])
+
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(40px, 6vw, 80px) clamp(24px, 4vw, 48px)', textAlign: 'center' }}>
       <div style={{ maxWidth: '560px', animation: 'fadeUp 0.6s ease forwards' }}>
