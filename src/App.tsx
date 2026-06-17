@@ -42,7 +42,7 @@ const GALLERY_PHOTOS = [
 const CHAR_INTERVAL = 55
 const TYPE_START = 600
 
-type Page = 'home' | 'services' | 'list' | 'book' | 'contact' | 'listing' | 'privacy' | 'terms' | 'about' | 'schedule'
+type Page = 'home' | 'services' | 'list' | 'book' | 'contact' | 'listing' | 'privacy' | 'terms' | 'about' | 'schedule' | 'thankyou'
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 function smoothstep(t: number) { return t * t * (3 - 2 * t) }
@@ -902,8 +902,17 @@ function ListPage({ onBack, onSchedule }: { onBack: () => void; onSchedule: () =
 }
 
 // ─── Schedule Page ────────────────────────────────────────────────────────────
-function SchedulePage({ onBack }: { onBack: () => void }) {
+function SchedulePage({ onBack, onThankyou }: { onBack: () => void; onThankyou: () => void }) {
   usePageMeta('Schedule Your Assessment | The Meriden Collection', 'Book a free 30-minute revenue assessment with The Meriden Collection team.')
+
+  useEffect(() => {
+    const handler = (e: MessageEvent) => {
+      if (e.data?.event === 'calendly.event_scheduled') onThankyou()
+    }
+    window.addEventListener('message', handler)
+    return () => window.removeEventListener('message', handler)
+  }, [onThankyou])
+
   return (
     <div style={{ minHeight: '100vh', background: '#FFFFFF', paddingTop: '100px' }}>
       <div style={{ maxWidth: '860px', margin: '0 auto', padding: 'clamp(40px, 6vw, 80px) clamp(24px, 4vw, 48px)' }}>
@@ -946,6 +955,37 @@ function SchedulePage({ onBack }: { onBack: () => void }) {
             </ul>
           </div>
         </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Thank You Page ───────────────────────────────────────────────────────────
+function ThankYouPage({ onNavigate }: { onNavigate: (p: Page) => void }) {
+  usePageMeta('You\'re Booked | The Meriden Collection', 'Thank you for booking a revenue assessment with The Meriden Collection.')
+  return (
+    <div style={{ minHeight: '100vh', background: '#FFFFFF', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 'clamp(40px, 6vw, 80px) clamp(24px, 4vw, 48px)', textAlign: 'center' }}>
+      <div style={{ maxWidth: '560px', animation: 'fadeUp 0.6s ease forwards' }}>
+        <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: '#F7F4EF', border: '1px solid #E4D9BE', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 32px' }}>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#2A2927" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
+        <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888', marginBottom: '16px' }}>You're confirmed</p>
+        <h1 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(28px, 4vw, 48px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '20px' }}>
+          We'll see you soon.
+        </h1>
+        <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(14px, 1.3vw, 16px)', color: '#666', lineHeight: 1.75, marginBottom: '40px' }}>
+          A calendar invite has been sent to your email. Our team will be in touch before your session with everything you need.
+        </p>
+        <button
+          onClick={() => onNavigate('home')}
+          style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 600, fontSize: '12px', letterSpacing: '0.15em', textTransform: 'uppercase', color: '#2A2927', background: '#E4D9BE', padding: '14px 36px', borderRadius: '8px', border: 'none', cursor: 'pointer', transition: 'opacity 0.2s' }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
+          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+        >
+          Back to Home
+        </button>
       </div>
     </div>
   )
@@ -2176,6 +2216,7 @@ const PAGE_PATHS: Record<Page, string> = {
   about: '/about',
   list: '/partner',
   schedule: '/schedule',
+  thankyou: '/thankyou',
   book: '/book',
   contact: '/contact',
   listing: '/listing',
@@ -2338,7 +2379,8 @@ export default function App() {
       {page === 'services' && <ServicesPage onNavigate={navigate} />}
       {page === 'about' && <AboutPage onNavigate={navigate} />}
       {page === 'list' && <ListPage onBack={() => navigate('home')} onSchedule={() => { navigate('schedule'); window.scrollTo({ top: 0 }) }} />}
-      {page === 'schedule' && <SchedulePage onBack={() => navigate('list')} />}
+      {page === 'schedule' && <SchedulePage onBack={() => navigate('list')} onThankyou={() => { navigate('thankyou'); window.scrollTo({ top: 0 }) }} />}
+      {page === 'thankyou' && <ThankYouPage onNavigate={navigate} />}
       {page === 'book' && <BookPage onViewListing={(id, images, amenities) => { navigate('listing', id, images, amenities); window.scrollTo({ top: 0 }) }} />}
       {page === 'contact' && <ContactPage onBack={() => navigate('home')} />}
       {page === 'privacy' && <PrivacyPolicyPage onBack={() => navigate('home')} />}
