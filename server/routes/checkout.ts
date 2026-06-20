@@ -13,7 +13,6 @@ interface CheckoutBody {
   pricePerNight: number
   totalNightlyCost?: number
   cleaningFee: number
-  gst: number
   guestFirstName: string
   guestLastName: string
   guestEmail: string
@@ -27,7 +26,7 @@ router.post('/', async (req: Request, res: Response) => {
   const body = req.body as CheckoutBody
   const {
     listingId, listingName, checkIn, checkOut, guests, nights,
-    pricePerNight, totalNightlyCost, cleaningFee, gst,
+    pricePerNight, totalNightlyCost, cleaningFee,
     guestFirstName, guestLastName, guestEmail, guestPhone, specialRequests,
   } = body
   const accommodationAmount = totalNightlyCost ?? nights * pricePerNight
@@ -62,14 +61,6 @@ router.post('/', async (req: Request, res: Response) => {
             currency: 'aud',
             unit_amount: Math.round(cleaningFee * 100),
             product_data: { name: 'Cleaning fee' },
-          },
-          quantity: 1,
-        },
-        {
-          price_data: {
-            currency: 'aud',
-            unit_amount: Math.round(gst * 100),
-            product_data: { name: 'GST (10%)' },
           },
           quantity: 1,
         },

@@ -414,7 +414,6 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
           pricePerNight,
           totalNightlyCost: Math.round(totalNightlyCost),
           cleaningFee,
-          gst: Math.round(gst),
           guestFirstName: guestForm.firstName,
           guestLastName: guestForm.lastName,
           guestEmail: guestForm.email,
@@ -448,8 +447,7 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
   }
   const pricePerNight = nights > 0 ? Math.round(totalNightlyCost / nights) : basePrice
   const subtotal = totalNightlyCost + (nights > 0 ? cleaningFee : 0)
-  const gst = subtotal * 0.1
-  const total = subtotal + gst
+  const total = subtotal
 
   // First blocked date after checkIn: selectable as checkout (check-out AM, new arrival PM)
   let checkoutBoundary: Date | null = null
@@ -915,7 +913,6 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
                   {[
                     [`$${pricePerNight.toLocaleString()} avg × ${nights} night${nights !== 1 ? 's' : ''}`, totalNightlyCost],
                     ['Cleaning fee', cleaningFee],
-                    ['GST (10%)', gst],
                   ].map(([label, val]) => (
                     <div key={String(label)} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                       <span style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', color: '#666' }}>{label}</span>
