@@ -2300,6 +2300,29 @@ export default function App() {
     return () => window.removeEventListener('popstate', onPop)
   }, [])
 
+  // Update document title + meta description per page
+  useEffect(() => {
+    const meta: Record<Page, { title: string; description: string }> = {
+      home:     { title: 'Airbnb & Short-Term Rental Management Sydney | The Meriden Collection', description: "Sydney's premium short-term rental management company. Earn up to 50% more than long-term leasing — fully managed, hassle-free." },
+      services: { title: 'STR Management Services Sydney | The Meriden Collection', description: 'Fully managed Airbnb service covering listing optimisation, dynamic pricing, guest communication, cleaning and maintenance. View our Essentials and Signature packages.' },
+      about:    { title: 'About Us | The Meriden Collection Sydney', description: 'Meet the team behind Sydney\'s premium short-term rental management company — dedicated to maximising your property\'s earning potential.' },
+      list:     { title: 'List Your Property | Short-Term Rental Management Sydney', description: 'Partner with The Meriden Collection. Get a free property assessment and discover how much your Sydney property could earn on Airbnb.' },
+      schedule: { title: 'Schedule a Free Consultation | The Meriden Collection', description: 'Book a free 30-minute consultation with our Sydney STR management team. We\'ll assess your property and outline your earning potential.' },
+      book:     { title: 'Book a Luxury Stay in Sydney | The Meriden Collection', description: 'Browse and book premium short-term rentals in Sydney through The Meriden Collection. Exceptional properties, fully managed.' },
+      contact:  { title: 'Contact Us | The Meriden Collection Sydney', description: 'Get in touch with The Meriden Collection. We manage short-term rentals across Sydney — reach us by email, phone or via our contact form.' },
+      listing:  { title: 'Property | The Meriden Collection Sydney', description: 'View this premium short-term rental property managed by The Meriden Collection in Sydney.' },
+      privacy:  { title: 'Privacy Policy | The Meriden Collection', description: 'Privacy policy for The Meriden Collection — how we collect, use and protect your personal information.' },
+      terms:    { title: 'Terms & Conditions | The Meriden Collection', description: 'Terms and conditions for using The Meriden Collection website and booking services.' },
+      thankyou: { title: 'Thank You | The Meriden Collection', description: 'Thank you for getting in touch with The Meriden Collection.' },
+    }
+    const { title, description } = meta[page]
+    document.title = title
+    const descTag = document.querySelector('meta[name="description"]')
+    if (descTag) descTag.setAttribute('content', description)
+    const canonical = document.querySelector('link[rel="canonical"]')
+    if (canonical) canonical.setAttribute('href', `https://themeridencollection.com${PAGE_PATHS[page]}`)
+  }, [page])
+
   const navigate = (p: Page, listingId?: number, listingImages?: Array<{ url: string; sortOrder?: number }>, listingAmenities?: Array<{ amenityName: string }>) => {
     const path = PAGE_PATHS[p]
     window.history.pushState({}, '', path)

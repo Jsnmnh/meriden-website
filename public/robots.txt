@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
+Disallow: /thankyou
+Disallow: /listing
 
 Sitemap: https://themeridencollection.com/sitemap.xml
