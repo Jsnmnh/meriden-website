@@ -315,6 +315,22 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
       .finally(() => setLoading(false))
   }, [listingId])
 
+  // Override the generic per-page title/description/canonical set by App.tsx
+  // once the real property data is in, so the rendered DOM (what Google indexes) is listing-specific.
+  useEffect(() => {
+    if (!listing) return
+    const title = `${listing.name ?? 'Luxury Stay'} — ${listing.city ?? 'Sydney'} | The Meriden Collection`
+    const rawDesc = listing.description ? listing.description.replace(/\s+/g, ' ').trim() : ''
+    const description = rawDesc
+      ? (rawDesc.length > 155 ? `${rawDesc.slice(0, 152)}...` : rawDesc)
+      : 'View this premium short-term rental property managed by The Meriden Collection in Sydney.'
+    document.title = title
+    const descTag = document.querySelector('meta[name="description"]')
+    if (descTag) descTag.setAttribute('content', description)
+    const canonical = document.querySelector('link[rel="canonical"]')
+    if (canonical) canonical.setAttribute('href', `https://themeridencollection.com/listing/${listingId}`)
+  }, [listing, listingId])
+
   // Fetch other listings for "You might also like"
   useEffect(() => {
     fetch('/api/listings')

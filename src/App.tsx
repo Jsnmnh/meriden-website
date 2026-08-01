@@ -2251,7 +2251,13 @@ const PAGE_PATHS: Record<Page, string> = {
   terms: '/terms',
 }
 
+function parseListingId(pathname: string): number | null {
+  const match = pathname.match(/^\/listing\/(\d+)/)
+  return match ? Number(match[1]) : null
+}
+
 function pathToPage(pathname: string): Page {
+  if (parseListingId(pathname) !== null) return 'listing'
   const entry = Object.entries(PAGE_PATHS).find(([, path]) => path === pathname)
   return (entry?.[0] as Page) ?? 'home'
 }
@@ -2260,7 +2266,7 @@ export default function App() {
   const [page, setPage] = useState<Page>(() => pathToPage(window.location.pathname))
   const [menuOpen, setMenuOpen] = useState(false)
   const [navColor, setNavColor] = useState(DARK_COLOR)
-  const [currentListingId, setCurrentListingId] = useState<number | null>(null)
+  const [currentListingId, setCurrentListingId] = useState<number | null>(() => parseListingId(window.location.pathname))
   const [currentListingImages, setCurrentListingImages] = useState<Array<{ url: string; sortOrder?: number }> | undefined>(undefined)
   const [currentListingAmenities, setCurrentListingAmenities] = useState<Array<{ amenityName: string }> | undefined>(undefined)
   const [bookingBanner, setBookingBanner] = useState<'success' | 'cancelled' | null>(null)
@@ -2295,7 +2301,10 @@ export default function App() {
 
   // Sync browser back/forward buttons
   useEffect(() => {
-    const onPop = () => setPage(pathToPage(window.location.pathname))
+    const onPop = () => {
+      setPage(pathToPage(window.location.pathname))
+      setCurrentListingId(parseListingId(window.location.pathname))
+    }
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [])
@@ -2320,11 +2329,12 @@ export default function App() {
     const descTag = document.querySelector('meta[name="description"]')
     if (descTag) descTag.setAttribute('content', description)
     const canonical = document.querySelector('link[rel="canonical"]')
-    if (canonical) canonical.setAttribute('href', `https://themeridencollection.com${PAGE_PATHS[page]}`)
-  }, [page])
+    const canonicalPath = page === 'listing' && currentListingId != null ? `/listing/${currentListingId}` : PAGE_PATHS[page]
+    if (canonical) canonical.setAttribute('href', `https://themeridencollection.com${canonicalPath}`)
+  }, [page, currentListingId])
 
   const navigate = (p: Page, listingId?: number, listingImages?: Array<{ url: string; sortOrder?: number }>, listingAmenities?: Array<{ amenityName: string }>) => {
-    const path = PAGE_PATHS[p]
+    const path = p === 'listing' && listingId !== undefined ? `/listing/${listingId}` : PAGE_PATHS[p]
     window.history.pushState({}, '', path)
     setPage(p)
     setMenuOpen(false)

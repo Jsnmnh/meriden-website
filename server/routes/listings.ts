@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express'
-import { getListings, getListing, getListingImages, getCalendar, getReviews } from '../lib/hostaway.js'
+import { getListing, getCalendar, getReviews, getListingsCached, getListingWithImages } from '../lib/hostaway.js'
 import { get, set } from '../lib/cache.js'
 
 const router = Router()
@@ -7,10 +7,7 @@ const LISTING_TTL = 15 * 60 * 1000
 
 router.get('/', async (_req: Request, res: Response) => {
   try {
-    const cached = get<unknown[]>('listings')
-    if (cached) return res.json(cached)
-    const data = await getListings()
-    set('listings', data, LISTING_TTL)
+    const data = await getListingsCached()
     res.json(data)
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Unknown error'
@@ -21,18 +18,7 @@ router.get('/', async (_req: Request, res: Response) => {
 router.get('/:id', async (req: Request, res: Response) => {
   const id = Number(req.params.id)
   try {
-    const key = `listing:${id}`
-    const cached = get<unknown>(key)
-    if (cached) return res.json(cached)
-    const data = await getListing(id) as Record<string, unknown>
-    const imgs = data.listingImages as unknown[] | undefined
-    if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
-      try {
-        const imgData = await getListingImages(id)
-        if (Array.isArray(imgData) && imgData.length > 0) data.listingImages = imgData
-      } catch (_) {}
-    }
-    set(key, data, LISTING_TTL)
+    const data = await getListingWithImages(id)
     res.json(data)
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : 'Unknown error'

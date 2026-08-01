@@ -1,4 +1,7 @@
 import 'dotenv/config'
+import { get, set } from './cache.js'
+
+const LISTING_TTL = 15 * 60 * 1000
 
 const ACCOUNT_ID = process.env.HOSTAWAY_ACCOUNT_ID!
 const API_KEY = process.env.HOSTAWAY_API_KEY!
@@ -63,6 +66,31 @@ export async function getListing(id: number) {
 
 export async function getListingImages(id: number) {
   return request<unknown[]>(`/listings/${id}/listingImages`)
+}
+
+export async function getListingsCached() {
+  const key = 'listings'
+  const cached = get<unknown[]>(key)
+  if (cached) return cached
+  const data = await getListings()
+  set(key, data, LISTING_TTL)
+  return data
+}
+
+export async function getListingWithImages(id: number) {
+  const key = `listing:${id}`
+  const cached = get<Record<string, unknown>>(key)
+  if (cached) return cached
+  const data = await getListing(id) as Record<string, unknown>
+  const imgs = data.listingImages as unknown[] | undefined
+  if (!imgs || (Array.isArray(imgs) && imgs.length === 0)) {
+    try {
+      const imgData = await getListingImages(id)
+      if (Array.isArray(imgData) && imgData.length > 0) data.listingImages = imgData
+    } catch (_) {}
+  }
+  set(key, data, LISTING_TTL)
+  return data
 }
 
 export async function getReviews(listingId: number) {
