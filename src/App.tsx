@@ -1056,6 +1056,17 @@ function HostawayCalendar({ listingId }: { listingId: number }) {
 // ─── Book Now Page ────────────────────────────────────────────────────────────
 const FALLBACK_LISTINGS: ApiListing[] = []
 
+// Fixed display order for the Book a Stay grid (by Hostaway listing ID)
+const LISTING_DISPLAY_ORDER = [573775, 429804, 459293, 503897, 490524, 553723]
+
+function sortByDisplayOrder(listings: ApiListing[]): ApiListing[] {
+  return [...listings].sort((a, b) => {
+    const ai = LISTING_DISPLAY_ORDER.indexOf(a.id)
+    const bi = LISTING_DISPLAY_ORDER.indexOf(b.id)
+    return (ai === -1 ? LISTING_DISPLAY_ORDER.length : ai) - (bi === -1 ? LISTING_DISPLAY_ORDER.length : bi)
+  })
+}
+
 interface ApiListing {
   id: number
   name?: string
@@ -1106,7 +1117,7 @@ function BookPage({ onViewListing }: { onViewListing: (id: number, images?: Arra
   useEffect(() => {
     fetch('/api/listings')
       .then(r => r.ok ? r.json() : Promise.reject())
-      .then((data: ApiListing[]) => { if (Array.isArray(data) && data.length > 0) setListings(data) })
+      .then((data: ApiListing[]) => { if (Array.isArray(data) && data.length > 0) setListings(sortByDisplayOrder(data)) })
       .catch(() => {})
   }, [])
 
