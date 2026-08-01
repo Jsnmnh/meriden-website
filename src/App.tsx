@@ -1713,6 +1713,58 @@ function ServicesPage({ onNavigate }: { onNavigate: (p: Page) => void }) {
       </section>
 
 
+      {/* Traditional Lease vs Meriden STR Comparison */}
+      <section style={{ background: '#F7F4EF', padding: 'clamp(80px, 10vw, 140px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30, borderTop: '1px solid #E8E2D9' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto' }}>
+          <ScrollReveal>
+            <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '11px', letterSpacing: '0.22em', textTransform: 'uppercase', color: '#888', marginBottom: '1.2rem' }}>The Numbers Don’t Lie</p>
+            <h2 style={{ fontFamily: "'Cinzel', serif", fontWeight: 700, fontSize: 'clamp(26px, 3vw, 46px)', color: '#000', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: 'clamp(40px, 5vw, 64px)' }}>
+              Why owners are leaving<br />long-term leasing behind.
+            </h2>
+          </ScrollReveal>
+          <ScrollReveal>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontFamily: "'Josefin Sans', sans-serif" }}>
+                <thead>
+                  <tr>
+                    <th style={{ textAlign: 'left', padding: '14px 20px', fontWeight: 300, fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888', width: '36%', borderBottom: '2px solid #E0D9CE' }}></th>
+                    <th style={{ textAlign: 'center', padding: '14px 20px', fontWeight: 600, fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#888', background: '#EDE8DF', borderRadius: '6px 6px 0 0', borderBottom: '2px solid #D5CAB8' }}>Traditional Lease</th>
+                    <th style={{ textAlign: 'center', padding: '14px 20px', fontWeight: 600, fontSize: '11px', letterSpacing: '0.18em', textTransform: 'uppercase', color: '#2A2927', background: '#E4D9BE', borderRadius: '6px 6px 0 0', borderBottom: '2px solid #C9B99A' }}>Meriden STR</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[
+                    { label: 'Rental Income', lease: 'Baseline fixed rate', str: 'Up to 50% more' },
+                    { label: 'Lease Flexibility', lease: 'Fixed 12-month term', str: 'Fully dynamic — adjust anytime' },
+                    { label: 'Property Access', lease: 'No access during tenancy', str: 'Block dates and use whenever you like' },
+                    { label: 'Property Condition', lease: 'Tenant-controlled', str: 'Professionally cleaned after every stay' },
+                    { label: 'Income Growth', lease: 'CPI-linked increases only', str: 'Nightly market pricing — optimised in real time' },
+                    { label: 'Owner Involvement', lease: 'Maintenance calls & disputes', str: 'Zero — we handle everything' },
+                  ].map((row, i) => (
+                    <tr key={row.label} style={{ background: i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.02)' }}>
+                      <td style={{ padding: '16px 20px', fontWeight: 400, fontSize: 'clamp(13px, 1.1vw, 15px)', color: '#333', borderBottom: '1px solid #E8E2D9' }}>{row.label}</td>
+                      <td style={{ padding: '16px 20px', textAlign: 'center', fontSize: 'clamp(12px, 1vw, 14px)', color: '#888', background: 'rgba(237,232,223,0.35)', borderBottom: '1px solid #E8E2D9' }}>{row.lease}</td>
+                      <td style={{ padding: '16px 20px', textAlign: 'center', fontSize: 'clamp(12px, 1vw, 14px)', fontWeight: 500, color: '#2A2927', background: 'rgba(228,217,190,0.3)', borderBottom: '1px solid #D5CAB8' }}>{row.str}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </ScrollReveal>
+
+          {/* Personal use callout pill */}
+          <ScrollReveal delay={100}>
+            <div style={{ marginTop: '40px', display: 'flex', alignItems: 'center', gap: '14px', background: '#2A2927', borderRadius: '100px', padding: '16px 28px', width: 'fit-content' }}>
+              <span style={{ fontSize: '20px', flexShrink: 0 }}>🗝️</span>
+              <p style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: 'clamp(13px, 1.1vw, 15px)', color: '#E4D9BE', letterSpacing: '0.01em', lineHeight: 1.5, margin: 0 }}>
+                Your property, your calendar — block dates and use your home anytime, for as long as you like.
+              </p>
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+
       {/* Featured In */}
       <section style={{ background: '#FFFFFF', padding: 'clamp(48px, 6vw, 72px) clamp(24px, 4vw, 64px)', position: 'relative', zIndex: 30, borderTop: '1px solid #F0ECE4' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
