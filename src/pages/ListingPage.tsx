@@ -19,6 +19,8 @@ interface ListingData {
   guestsNumber?: number
   price?: number
   cleaningFee?: number
+  weeklyDiscount?: number
+  monthlyDiscount?: number
   listingImages?: Array<{ url: string; sortOrder?: number }>
   listingAmenities?: Array<{ amenityName: string }>
   checkInTimeStart?: unknown
@@ -453,14 +455,23 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
   const nights = checkIn && checkOut ? Math.round((checkOut.getTime() - checkIn.getTime()) / 86_400_000) : 0
 
   // Sum per-night prices from PriceLabs calendar; fall back to base price per night
-  let totalNightlyCost = 0
+  let rawNightlyCost = 0
   if (checkIn && checkOut && nights > 0) {
     const cur = new Date(checkIn)
     while (cur < checkOut) {
-      totalNightlyCost += avail[fmt(cur)]?.price ?? basePrice
+      rawNightlyCost += avail[fmt(cur)]?.price ?? basePrice
       cur.setDate(cur.getDate() + 1)
     }
   }
+  // Hostaway length-of-stay discounts: monthly (28+ nights) takes precedence over weekly (7+ nights)
+  const losDiscountMultiplier = nights >= 28 && l.monthlyDiscount
+    ? l.monthlyDiscount
+    : nights >= 7 && l.weeklyDiscount
+      ? l.weeklyDiscount
+      : 1
+  const totalNightlyCost = rawNightlyCost * losDiscountMultiplier
+  const losDiscountAmount = rawNightlyCost - totalNightlyCost
+  const losDiscountLabel = nights >= 28 && l.monthlyDiscount ? 'Monthly discount' : nights >= 7 && l.weeklyDiscount ? 'Weekly discount' : null
   const pricePerNight = nights > 0 ? Math.round(totalNightlyCost / nights) : basePrice
   const subtotal = totalNightlyCost + (nights > 0 ? cleaningFee : 0)
   const total = subtotal
@@ -927,12 +938,13 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
               {nights > 0 && (
                 <div style={{ borderTop: `1px solid ${CREAM}`, paddingTop: '16px', marginBottom: '16px' }}>
                   {[
-                    [`$${pricePerNight.toLocaleString()} avg × ${nights} night${nights !== 1 ? 's' : ''}`, totalNightlyCost],
+                    [`$${Math.round(rawNightlyCost / nights).toLocaleString()} avg × ${nights} night${nights !== 1 ? 's' : ''}`, rawNightlyCost],
+                    ...(losDiscountLabel ? [[losDiscountLabel, -losDiscountAmount]] : []),
                     ['Cleaning fee', cleaningFee],
                   ].map(([label, val]) => (
                     <div key={String(label)} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                       <span style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', color: '#666' }}>{label}</span>
-                      <span style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', color: '#000' }}>${Number(val).toFixed(0)}</span>
+                      <span style={{ fontFamily: "'Josefin Sans', sans-serif", fontWeight: 300, fontSize: '12px', color: Number(val) < 0 ? '#a15c2f' : '#000' }}>{Number(val) < 0 ? '-' : ''}${Math.abs(Number(val)).toFixed(0)}</span>
                     </div>
                   ))}
                   <div style={{ display: 'flex', justifyContent: 'space-between', borderTop: `1px solid ${CREAM}`, paddingTop: '12px' }}>
