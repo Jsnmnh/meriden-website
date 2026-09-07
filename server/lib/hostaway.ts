@@ -89,6 +89,17 @@ export async function getListingWithImages(id: number) {
       if (Array.isArray(imgData) && imgData.length > 0) data.listingImages = imgData
     } catch (_) {}
   }
+  // Some listings return no images from both the single-listing and listingImages
+  // endpoints (Hostaway API inconsistency), even though the bulk /listings endpoint has them.
+  const stillEmpty = !Array.isArray(data.listingImages) || (data.listingImages as unknown[]).length === 0
+  if (stillEmpty) {
+    try {
+      const bulk = await getListingsCached() as Array<Record<string, unknown>>
+      const match = bulk.find(l => Number(l.id) === id)
+      const bulkImages = match?.listingImages as unknown[] | undefined
+      if (Array.isArray(bulkImages) && bulkImages.length > 0) data.listingImages = bulkImages
+    } catch (_) {}
+  }
   set(key, data, LISTING_TTL)
   return data
 }
