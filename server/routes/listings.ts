@@ -51,8 +51,15 @@ router.get('/:id/reviews', async (req: Request, res: Response) => {
     const cached = get<unknown[]>(key)
     if (cached) return res.json(cached)
     const data = await getReviews(id) as Array<Record<string, unknown>>
+    // Hostaway's sortOrder=submittedAt desc query param is not honored by the API, so sort here
     const filtered = Array.isArray(data)
-      ? data.filter(r => Number(r.listingMapId) === id)
+      ? data
+          .filter(r => Number(r.listingMapId) === id)
+          .sort((a, b) => {
+            const at = a.submittedAt ? new Date(String(a.submittedAt)).getTime() : 0
+            const bt = b.submittedAt ? new Date(String(b.submittedAt)).getTime() : 0
+            return bt - at
+          })
       : []
     set(key, filtered, LISTING_TTL)
     res.json(filtered)
