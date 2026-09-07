@@ -12,6 +12,7 @@ interface CheckoutBody {
   nights: number
   pricePerNight: number
   totalNightlyCost?: number
+  extraGuestFee?: number
   cleaningFee: number
   guestFirstName: string
   guestLastName: string
@@ -26,7 +27,7 @@ router.post('/', async (req: Request, res: Response) => {
   const body = req.body as CheckoutBody
   const {
     listingId, listingName, checkIn, checkOut, guests, nights,
-    pricePerNight, totalNightlyCost, cleaningFee,
+    pricePerNight, totalNightlyCost, extraGuestFee, cleaningFee,
     guestFirstName, guestLastName, guestEmail, guestPhone, specialRequests,
   } = body
   const accommodationAmount = totalNightlyCost ?? nights * pricePerNight
@@ -56,6 +57,14 @@ router.post('/', async (req: Request, res: Response) => {
           },
           quantity: 1,
         },
+        ...(extraGuestFee ? [{
+          price_data: {
+            currency: 'aud',
+            unit_amount: Math.round(extraGuestFee * 100),
+            product_data: { name: 'Extra guest fee' },
+          },
+          quantity: 1,
+        }] : []),
         {
           price_data: {
             currency: 'aud',

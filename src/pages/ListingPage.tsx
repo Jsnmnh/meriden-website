@@ -21,6 +21,8 @@ interface ListingData {
   cleaningFee?: number
   weeklyDiscount?: number
   monthlyDiscount?: number
+  guestsIncluded?: number
+  priceForExtraPerson?: number
   listingImages?: Array<{ url: string; sortOrder?: number }>
   listingAmenities?: Array<{ amenityName: string }>
   checkInTimeStart?: unknown
@@ -431,6 +433,7 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
           nights,
           pricePerNight,
           totalNightlyCost: Math.round(totalNightlyCost),
+          extraGuestFee: Math.round(extraGuestFee),
           cleaningFee,
           guestFirstName: guestForm.firstName,
           guestLastName: guestForm.lastName,
@@ -473,7 +476,12 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
   const losDiscountAmount = rawNightlyCost - totalNightlyCost
   const losDiscountLabel = nights >= 28 && l.monthlyDiscount ? 'Monthly discount' : nights >= 7 && l.weeklyDiscount ? 'Weekly discount' : null
   const pricePerNight = nights > 0 ? Math.round(totalNightlyCost / nights) : basePrice
-  const subtotal = totalNightlyCost + (nights > 0 ? cleaningFee : 0)
+
+  // Hostaway extra-guest fee: charged per night for each guest beyond guestsIncluded
+  const extraGuests = Math.max(0, guests - (l.guestsIncluded ?? 1))
+  const extraGuestFee = nights > 0 ? extraGuests * (l.priceForExtraPerson ?? 0) * nights : 0
+
+  const subtotal = totalNightlyCost + extraGuestFee + (nights > 0 ? cleaningFee : 0)
   const total = subtotal
 
   // First blocked date after checkIn: selectable as checkout (check-out AM, new arrival PM)
@@ -940,6 +948,7 @@ export default function ListingPage({ listingId, initialImages, initialAmenities
                   {[
                     [`$${Math.round(rawNightlyCost / nights).toLocaleString()} avg × ${nights} night${nights !== 1 ? 's' : ''}`, rawNightlyCost],
                     ...(losDiscountLabel ? [[losDiscountLabel, -losDiscountAmount]] : []),
+                    ...(extraGuestFee > 0 ? [[`Extra guest fee × ${extraGuests}`, extraGuestFee]] : []),
                     ['Cleaning fee', cleaningFee],
                   ].map(([label, val]) => (
                     <div key={String(label)} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
