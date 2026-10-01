@@ -4,6 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import { sendMail, assessmentNotificationHtml, inquiryAutoReplyHtml } from '../lib/mailer.js'
+import { createOwnerLead } from '../lib/notion.js'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const router = Router()
@@ -61,7 +62,7 @@ router.post('/', async (req: Request, res: Response) => {
 
   const notificationEmail = process.env.NOTIFICATION_EMAIL || process.env.GMAIL_USER || ''
 
-  const [notifyResult, autoReplyResult, sheetResult] = await Promise.allSettled([
+  const [notifyResult, autoReplyResult, sheetResult, notionResult] = await Promise.allSettled([
     sendMail({
       to: notificationEmail,
       subject: `New Assessment Request — ${data.name} · ${data.address}`,
@@ -79,11 +80,13 @@ router.post('/', async (req: Request, res: Response) => {
       replyTo: notificationEmail,
     }),
     appendToSheet(data),
+    createOwnerLead(data),
   ])
 
   if (notifyResult.status === 'rejected') console.error('Notify email error:', notifyResult.reason)
   if (autoReplyResult.status === 'rejected') console.error('Auto-reply error:', autoReplyResult.reason)
   if (sheetResult.status === 'rejected') console.error('Sheet error:', sheetResult.reason)
+  if (notionResult.status === 'rejected') console.error('Notion lead error:', notionResult.reason)
 
   res.json({ ok: true })
 })
